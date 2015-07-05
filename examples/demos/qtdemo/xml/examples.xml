@@ -95,10 +95,6 @@
     <example filename="svgviewer" name="SVG Viewer" />
     <example filename="transformations" name="Transformations" />
   </category>
-  <category dirname="phonon" name="Phonon">
-    <example filename="capabilities" name="Capabilities" />
-    <example filename="musicplayer" name="Music Player" />
-  </category>
   <category dirname="richtext" name="Rich Text">
     <example filename="calendar" name="Calendar" />
     <example filename="orderform" name="Order Form" />
