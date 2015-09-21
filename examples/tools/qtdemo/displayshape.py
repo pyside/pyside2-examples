@@ -22,7 +22,7 @@
 ############################################################################
 
 from math import ceil
-from PySide import QtCore, QtGui, QtNetwork, QtXml
+from PySide2 import QtCore, QtGui, QtNetwork, QtXml
 
 
 class DisplayShape:

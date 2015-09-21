@@ -1,7 +1,7 @@
 import math
 import random
 
-from PySide import QtCore
+from PySide2 import QtCore
 
 from colors import Colors
 from demoitem import DemoItem

@@ -3,7 +3,7 @@
 
 import math
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class Lighting(QtGui.QGraphicsView):

@@ -6,7 +6,7 @@
 
 import math
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import diagramscene_rc
 

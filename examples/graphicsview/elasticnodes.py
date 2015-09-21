@@ -24,7 +24,7 @@
 import sys
 import weakref
 import math
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class Edge(QtGui.QGraphicsItem):

@@ -4,7 +4,7 @@
 
 import random
 
-from PySide import QtCore, QtGui, QtNetwork
+from PySide2 import QtCore, QtGui, QtNetwork
 
 
 class Server(QtGui.QDialog):

@@ -44,7 +44,7 @@
 # which are adaptations of the original C++ Qt's examples.
 
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import appchooser_rc
 

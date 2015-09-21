@@ -23,7 +23,7 @@
  */
 """
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore
 from kineticscroll import KineticScroll
 
 #Ok I know, this class is not necessary in python

@@ -23,7 +23,7 @@
 ##
 ############################################################################
 
-from PySide import QtCore, QtGui, QtSql
+from PySide2 import QtCore, QtGui, QtSql
 
 import connection
 

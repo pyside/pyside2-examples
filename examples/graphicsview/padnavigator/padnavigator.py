@@ -4,7 +4,7 @@
 
 import math
 
-from PySide import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtOpenGL
 
 from padnavigator_rc import *
 from ui_backside import Ui_BackSide

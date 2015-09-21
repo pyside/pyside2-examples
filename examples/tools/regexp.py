@@ -2,7 +2,7 @@
 
 """PyQt4 port of the tools/regexp example from Qt v4.x"""
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class RegExpDialog(QtGui.QDialog):

@@ -28,7 +28,7 @@
 #sip.setapi('QString', 2)
 #sip.setapi('QVariant', 2)
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class MainWindow(QtGui.QMainWindow):

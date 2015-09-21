@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import easing_rc
 from ui_form import Ui_Form

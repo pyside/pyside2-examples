@@ -3,7 +3,7 @@
 """PySide port of the network/http example from Qt v4.x"""
 
 import sys
-from PySide import QtCore, QtGui, QtNetwork
+from PySide2 import QtCore, QtGui, QtNetwork
 
 
 class HttpWindow(QtGui.QDialog):

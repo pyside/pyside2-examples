@@ -36,7 +36,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 # $QT_END_LICENSE$
 
-from PySide import QtCore, QtGui, QtDeclarative
+from PySide2 import QtCore, QtGui, QtDeclarative
 
 class Console(QtCore.QObject):
 

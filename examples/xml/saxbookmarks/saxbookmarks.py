@@ -23,7 +23,7 @@
 ##
 ############################################################################
 
-from PySide import QtCore, QtGui, QtXml
+from PySide2 import QtCore, QtGui, QtXml
 
 
 class XbelGenerator(object):

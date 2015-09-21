@@ -1,6 +1,6 @@
 import sys
 
-from PySide import QtGui
+from PySide2 import QtGui
 
 
 class Colors(object):
@@ -230,7 +230,7 @@ class Colors(object):
     @classmethod
     def detectSystemResources(cls):
         try:
-            from PySide import QtOpenGL
+            from PySide2 import QtOpenGL
             cls.openGlAvailable = True
         except ImportError:
             cls.openGlAvailable = False

@@ -2,7 +2,7 @@
 
 """PyQt4 port of the layouts/basiclayout example from Qt v4.x"""
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class Dialog(QtGui.QDialog):

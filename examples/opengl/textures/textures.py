@@ -24,7 +24,7 @@
 ***************************************************************************"""
 
 import sys
-from PySide import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtOpenGL
 
 try:
     from OpenGL.GL import *

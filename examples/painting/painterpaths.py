@@ -25,7 +25,7 @@
 
 from math import cos, pi, sin
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class RenderArea(QtGui.QWidget):

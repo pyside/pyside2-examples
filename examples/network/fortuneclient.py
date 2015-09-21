@@ -2,7 +2,7 @@
 
 """PySide port of the network/fortuneclient example from Qt v4.x"""
 
-from PySide import QtCore, QtGui, QtNetwork
+from PySide2 import QtCore, QtGui, QtNetwork
 
 
 class Client(QtGui.QDialog):

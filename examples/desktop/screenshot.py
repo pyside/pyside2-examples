@@ -23,7 +23,7 @@
 ##
 #############################################################################
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 
 class Screenshot(QtGui.QWidget):

@@ -47,7 +47,7 @@ from PySide.QtGui import QApplication
 from QtMobility.PublishSubscribe import QValueSpace
 
 try:
-    from PySide import QtMaemo5
+    from PySide2 import QtMaemo5
     USE_MAEMO_5 = True
 except:
     USE_MAEMO_5 = False

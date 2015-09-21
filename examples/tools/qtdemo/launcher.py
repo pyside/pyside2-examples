@@ -25,7 +25,7 @@
 import sys
 import re
 
-from PySide import QtCore, QtGui, QtHelp, QtNetwork, QtXml
+from PySide2 import QtCore, QtGui, QtHelp, QtNetwork, QtXml
 
 from displaywidget import DisplayWidget
 from displayshape import TitleShape, DisplayShape, PanelShape, ImageShape, DocumentShape

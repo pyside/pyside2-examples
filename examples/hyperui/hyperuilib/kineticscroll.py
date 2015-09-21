@@ -24,7 +24,7 @@
 """
 
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore
 
 class KineticScroll(QtCore.QObject):
     MAX_SPEED = 2000

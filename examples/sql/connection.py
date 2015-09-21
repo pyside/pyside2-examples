@@ -23,7 +23,7 @@
 ##
 ############################################################################
 
-from PySide import QtSql, QtGui
+from PySide2 import QtSql, QtGui
 
 
 def createConnection():

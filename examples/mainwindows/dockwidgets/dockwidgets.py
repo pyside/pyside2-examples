@@ -27,7 +27,7 @@
 #import sip
 #sip.setapi('QString', 2)
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import dockwidgets_rc
 

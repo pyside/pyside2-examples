@@ -3,7 +3,7 @@
 """PySide port of the script/helloscript example from Qt v4.x"""
 
 import sys
-from PySide import QtGui, QtScript
+from PySide2 import QtGui, QtScript
 
 
 app = QtGui.QApplication(sys.argv)

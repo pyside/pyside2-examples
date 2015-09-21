@@ -25,7 +25,7 @@
 
 import sys
 import os.path
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import i18n_rc
 

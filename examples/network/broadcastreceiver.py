@@ -23,7 +23,7 @@
 # 
 ############################################################################
 
-from PySide import QtCore, QtGui, QtNetwork
+from PySide2 import QtCore, QtGui, QtNetwork
 
 
 class Receiver(QtGui.QDialog):

@@ -4,7 +4,7 @@
 
 import sys
 import re
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 
 import syntaxhighlighter_rc
 
