@@ -28,10 +28,10 @@
 #sip.setapi('QString', 2)
 #sip.setapi('QVariant', 2)
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     MaxRecentFiles = 5
     windowList = []
 
@@ -42,7 +42,7 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
-        self.textEdit = QtGui.QTextEdit()
+        self.textEdit = QtWidgets.QTextEdit()
         self.setCentralWidget(self.textEdit)
 
         self.createActions()
@@ -58,7 +58,7 @@ class MainWindow(QtGui.QMainWindow):
         other.show()
 
     def open(self):
-        fileName, filtr = QtGui.QFileDialog.getOpenFileName(self)
+        fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
         if fileName:
             self.loadFile(fileName)
 
@@ -69,7 +69,7 @@ class MainWindow(QtGui.QMainWindow):
             self.saveAs()
 
     def saveAs(self):
-        fileName, filtr = QtGui.QFileDialog.getSaveFileName(self)
+        fileName, filtr = QtWidgets.QFileDialog.getSaveFileName(self)
         if fileName:
             self.saveFile(fileName)
 
@@ -79,44 +79,44 @@ class MainWindow(QtGui.QMainWindow):
             self.loadFile(action.data())
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About Recent Files",
+        QtWidgets.QMessageBox.about(self, "About Recent Files",
                 "The <b>Recent Files</b> example demonstrates how to provide "
                 "a recently used file menu in a Qt application.")
 
     def createActions(self):
-        self.newAct = QtGui.QAction("&New", self,
+        self.newAct = QtWidgets.QAction("&New", self,
                 shortcut=QtGui.QKeySequence.New,
                 statusTip="Create a new file", triggered=self.newFile)
 
-        self.openAct = QtGui.QAction("&Open...", self,
+        self.openAct = QtWidgets.QAction("&Open...", self,
                 shortcut=QtGui.QKeySequence.Open,
                 statusTip="Open an existing file", triggered=self.open)
 
-        self.saveAct = QtGui.QAction("&Save", self,
+        self.saveAct = QtWidgets.QAction("&Save", self,
                 shortcut=QtGui.QKeySequence.Save,
                 statusTip="Save the document to disk", triggered=self.save)
 
-        self.saveAsAct = QtGui.QAction("Save &As...", self,
+        self.saveAsAct = QtWidgets.QAction("Save &As...", self,
                 shortcut=QtGui.QKeySequence.SaveAs,
                 statusTip="Save the document under a new name",
                 triggered=self.saveAs)
 
         for i in range(MainWindow.MaxRecentFiles):
             self.recentFileActs.append(
-                    QtGui.QAction(self, visible=False,
+                    QtWidgets.QAction(self, visible=False,
                             triggered=self.openRecentFile))
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 statusTip="Exit the application",
-                triggered=QtGui.qApp.closeAllWindows)
+                triggered=QtWidgets.qApp.closeAllWindows)
 
-        self.aboutAct = QtGui.QAction("&About", self,
+        self.aboutAct = QtWidgets.QAction("&About", self,
                 statusTip="Show the application's About box",
                 triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
                 statusTip="Show the Qt library's About box",
-                triggered=QtGui.qApp.aboutQt)
+                triggered=QtWidgets.qApp.aboutQt)
 
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
@@ -140,14 +140,14 @@ class MainWindow(QtGui.QMainWindow):
     def loadFile(self, fileName):
         file = QtCore.QFile(fileName)
         if not file.open( QtCore.QFile.ReadOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(self, "Recent Files",
+            QtWidgets.QMessageBox.warning(self, "Recent Files",
                     "Cannot read file %s:\n%s." % (fileName, file.errorString()))
             return
 
         instr = QtCore.QTextStream(file)
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         self.textEdit.setPlainText(instr.readAll())
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
         self.setCurrentFile(fileName)
         self.statusBar().showMessage("File loaded", 2000)
@@ -155,14 +155,14 @@ class MainWindow(QtGui.QMainWindow):
     def saveFile(self, fileName):
         file = QtCore.QFile(fileName)
         if not file.open(QtCore.QFile.WriteOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(self, "Recent Files",
+            QtWidgets.QMessageBox.warning(self, "Recent Files",
                     "Cannot write file %s:\n%s." % (fileName, file.errorString()))
             return
 
         outstr = QtCore.QTextStream(file)
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         outstr << self.textEdit.toPlainText()
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
         self.setCurrentFile(fileName)
         self.statusBar().showMessage("File saved", 2000)
@@ -187,7 +187,7 @@ class MainWindow(QtGui.QMainWindow):
 
         settings.setValue('recentFileList', files)
 
-        for widget in QtGui.QApplication.topLevelWidgets():
+        for widget in QtWidgets.QApplication.topLevelWidgets():
             if isinstance(widget, MainWindow):
                 widget.updateRecentFileActions()
 
@@ -220,7 +220,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())

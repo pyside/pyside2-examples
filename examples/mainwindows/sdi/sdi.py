@@ -27,12 +27,12 @@
 #import sip
 #sip.setapi('QVariant', 2)
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 import sdi_rc
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     sequenceNumber = 1
     windowList = []
 
@@ -59,7 +59,7 @@ class MainWindow(QtGui.QMainWindow):
         other.show()
 
     def open(self):
-        fileName, filtr = QtGui.QFileDialog.getOpenFileName(self)
+        fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
         if fileName:
             existing = self.findMainWindow(fileName)
             if existing:
@@ -87,7 +87,7 @@ class MainWindow(QtGui.QMainWindow):
             return self.saveFile(self.curFile)
 
     def saveAs(self):
-        fileName, filtr = QtGui.QFileDialog.getSaveFileName(self, "Save As",
+        fileName, filtr = QtWidgets.QFileDialog.getSaveFileName(self, "Save As",
                 self.curFile)
         if not fileName:
             return False
@@ -95,7 +95,7 @@ class MainWindow(QtGui.QMainWindow):
         return self.saveFile(fileName)
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About SDI",
+        QtWidgets.QMessageBox.about(self, "About SDI",
                 "The <b>SDI</b> example demonstrates how to write single "
                 "document interface applications using Qt.")
 
@@ -105,7 +105,7 @@ class MainWindow(QtGui.QMainWindow):
     def init(self):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.isUntitled = True
-        self.textEdit = QtGui.QTextEdit()
+        self.textEdit = QtWidgets.QTextEdit()
         self.setCentralWidget(self.textEdit)
 
         self.createActions()
@@ -118,52 +118,52 @@ class MainWindow(QtGui.QMainWindow):
         self.textEdit.document().contentsChanged.connect(self.documentWasModified)
 
     def createActions(self):
-        self.newAct = QtGui.QAction(QtGui.QIcon(':/images/new.png'), "&New",
+        self.newAct = QtWidgets.QAction(QtGui.QIcon(':/images/new.png'), "&New",
                 self, shortcut=QtGui.QKeySequence.New,
                 statusTip="Create a new file", triggered=self.newFile)
 
-        self.openAct = QtGui.QAction(QtGui.QIcon(':/images/open.png'),
+        self.openAct = QtWidgets.QAction(QtGui.QIcon(':/images/open.png'),
                 "&Open...", self, shortcut=QtGui.QKeySequence.Open,
                 statusTip="Open an existing file", triggered=self.open)
 
-        self.saveAct = QtGui.QAction(QtGui.QIcon(':/images/save.png'),
+        self.saveAct = QtWidgets.QAction(QtGui.QIcon(':/images/save.png'),
                 "&Save", self, shortcut=QtGui.QKeySequence.Save,
                 statusTip="Save the document to disk", triggered=self.save)
 
-        self.saveAsAct = QtGui.QAction("Save &As...", self,
+        self.saveAsAct = QtWidgets.QAction("Save &As...", self,
                 shortcut=QtGui.QKeySequence.SaveAs,
                 statusTip="Save the document under a new name",
                 triggered=self.saveAs)
 
-        self.closeAct = QtGui.QAction("&Close", self, shortcut="Ctrl+W",
+        self.closeAct = QtWidgets.QAction("&Close", self, shortcut="Ctrl+W",
                 statusTip="Close this window", triggered=self.close)
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 statusTip="Exit the application",
-                triggered=QtGui.qApp.closeAllWindows)
+                triggered=QtWidgets.qApp.closeAllWindows)
 
-        self.cutAct = QtGui.QAction(QtGui.QIcon(':/images/cut.png'), "Cu&t",
+        self.cutAct = QtWidgets.QAction(QtGui.QIcon(':/images/cut.png'), "Cu&t",
                 self, enabled=False, shortcut=QtGui.QKeySequence.Cut,
                 statusTip="Cut the current selection's contents to the clipboard",
                 triggered=self.textEdit.cut)
 
-        self.copyAct = QtGui.QAction(QtGui.QIcon(':/images/copy.png'),
+        self.copyAct = QtWidgets.QAction(QtGui.QIcon(':/images/copy.png'),
                 "&Copy", self, enabled=False, shortcut=QtGui.QKeySequence.Copy,
                 statusTip="Copy the current selection's contents to the clipboard",
                 triggered=self.textEdit.copy)
 
-        self.pasteAct = QtGui.QAction(QtGui.QIcon(':/images/paste.png'),
+        self.pasteAct = QtWidgets.QAction(QtGui.QIcon(':/images/paste.png'),
                 "&Paste", self, shortcut=QtGui.QKeySequence.Paste,
                 statusTip="Paste the clipboard's contents into the current selection",
                 triggered=self.textEdit.paste)
 
-        self.aboutAct = QtGui.QAction("&About", self,
+        self.aboutAct = QtWidgets.QAction("&About", self,
                 statusTip="Show the application's About box",
                 triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
                 statusTip="Show the Qt library's About box",
-                triggered=QtGui.qApp.aboutQt)
+                triggered=QtWidgets.qApp.aboutQt)
 
         self.textEdit.copyAvailable.connect(self.cutAct.setEnabled)
         self.textEdit.copyAvailable.connect(self.copyAct.setEnabled)
@@ -217,28 +217,28 @@ class MainWindow(QtGui.QMainWindow):
 
     def maybeSave(self):
         if self.textEdit.document().isModified():
-            ret = QtGui.QMessageBox.warning(self, "SDI",
+            ret = QtWidgets.QMessageBox.warning(self, "SDI",
                     "The document has been modified.\nDo you want to save "
                     "your changes?",
-                    QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard |
-                    QtGui.QMessageBox.Cancel)
-            if ret == QtGui.QMessageBox.Save:
+                    QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Discard |
+                    QtWidgets.QMessageBox.Cancel)
+            if ret == QtWidgets.QMessageBox.Save:
                 return self.save()
-            elif ret == QtGui.QMessageBox.Cancel:
+            elif ret == QtWidgets.QMessageBox.Cancel:
                 return False
         return True
 
     def loadFile(self, fileName):
         file = QtCore.QFile(fileName)
         if not file.open( QtCore.QFile.ReadOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(self, "SDI",
+            QtWidgets.QMessageBox.warning(self, "SDI",
                     "Cannot read file %s:\n%s." % (fileName, file.errorString()))
             return
 
         instr = QtCore.QTextStream(file)
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         self.textEdit.setPlainText(instr.readAll())
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
         self.setCurrentFile(fileName)
         self.statusBar().showMessage("File loaded", 2000)
@@ -246,14 +246,14 @@ class MainWindow(QtGui.QMainWindow):
     def saveFile(self, fileName):
         file = QtCore.QFile(fileName)
         if not file.open( QtCore.QFile.WriteOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(self, "SDI",
+            QtWidgets.QMessageBox.warning(self, "SDI",
                     "Cannot write file %s:\n%s." % (fileName, file.errorString()))
             return False
 
         outstr = QtCore.QTextStream(file)
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         outstr << self.textEdit.toPlainText()
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
         self.setCurrentFile(fileName)
         self.statusBar().showMessage("File saved", 2000)
@@ -278,7 +278,7 @@ class MainWindow(QtGui.QMainWindow):
     def findMainWindow(self, fileName):
         canonicalFilePath = QtCore.QFileInfo(fileName).canonicalFilePath()
 
-        for widget in QtGui.qApp.topLevelWidgets():
+        for widget in QtWidgets.qApp.topLevelWidgets():
             if isinstance(widget, MainWindow) and widget.curFile == canonicalFilePath:
                 return widget
 
@@ -289,7 +289,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())

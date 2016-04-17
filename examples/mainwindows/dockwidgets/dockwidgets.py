@@ -27,16 +27,16 @@
 #import sip
 #sip.setapi('QString', 2)
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets, QtPrintSupport
 
 import dockwidgets_rc
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.textEdit = QtGui.QTextEdit()
+        self.textEdit = QtWidgets.QTextEdit()
         self.setCentralWidget(self.textEdit)
 
         self.createActions()
@@ -97,10 +97,10 @@ class MainWindow(QtGui.QMainWindow):
 
     def print_(self):
         document = self.textEdit.document()
-        printer = QtGui.QPrinter()
+        printer = QtPrintSupport.QPrinter()
 
-        dlg = QtGui.QPrintDialog(printer, self)
-        if dlg.exec_() != QtGui.QDialog.Accepted:
+        dlg = QtPrintSupport.QPrintDialog(printer, self)
+        if dlg.exec_() != QtWidgets.QDialog.Accepted:
             return
 
         document.print_(printer)
@@ -108,21 +108,21 @@ class MainWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("Ready", 2000)
 
     def save(self):
-        filename, filtr = QtGui.QFileDialog.getSaveFileName(self,
+        filename, filtr = QtWidgets.QFileDialog.getSaveFileName(self,
                 "Choose a file name", '.', "HTML (*.html *.htm)")
         if not filename:
             return
 
         file = QtCore.QFile(filename)
         if not file.open(QtCore.QFile.WriteOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(self, "Dock Widgets",
+            QtWidgets.QMessageBox.warning(self, "Dock Widgets",
                     "Cannot write file %s:\n%s." % (filename, file.errorString()))
             return
 
         out = QtCore.QTextStream(file)
-        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         out << self.textEdit.toHtml()
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
         self.statusBar().showMessage("Saved '%s'" % filename, 2000)
 
@@ -165,42 +165,42 @@ class MainWindow(QtGui.QMainWindow):
         cursor.endEditBlock()
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About Dock Widgets",
+        QtWidgets.QMessageBox.about(self, "About Dock Widgets",
                 "The <b>Dock Widgets</b> example demonstrates how to use "
                 "Qt's dock widgets. You can enter your own text, click a "
                 "customer to add a customer name and address, and click "
                 "standard paragraphs to add them.")
 
     def createActions(self):
-        self.newLetterAct = QtGui.QAction(QtGui.QIcon(':/images/new.png'),
+        self.newLetterAct = QtWidgets.QAction(QtGui.QIcon(':/images/new.png'),
                 "&New Letter", self, shortcut=QtGui.QKeySequence.New,
                 statusTip="Create a new form letter",
                 triggered=self.newLetter)
 
-        self.saveAct = QtGui.QAction(QtGui.QIcon(':/images/save.png'),
+        self.saveAct = QtWidgets.QAction(QtGui.QIcon(':/images/save.png'),
                 "&Save...", self, shortcut=QtGui.QKeySequence.Save,
                 statusTip="Save the current form letter",
                 triggered=self.save)
 
-        self.printAct = QtGui.QAction(QtGui.QIcon(':/images/print.png'),
+        self.printAct = QtWidgets.QAction(QtGui.QIcon(':/images/print.png'),
                 "&Print...", self, shortcut=QtGui.QKeySequence.Print,
                 statusTip="Print the current form letter",
                 triggered=self.print_)
 
-        self.undoAct = QtGui.QAction(QtGui.QIcon(':/images/undo.png'),
+        self.undoAct = QtWidgets.QAction(QtGui.QIcon(':/images/undo.png'),
                 "&Undo", self, shortcut=QtGui.QKeySequence.Undo,
                 statusTip="Undo the last editing action", triggered=self.undo)
 
-        self.quitAct = QtGui.QAction("&Quit", self, shortcut="Ctrl+Q",
+        self.quitAct = QtWidgets.QAction("&Quit", self, shortcut="Ctrl+Q",
                 statusTip="Quit the application", triggered=self.close)
 
-        self.aboutAct = QtGui.QAction("&About", self,
+        self.aboutAct = QtWidgets.QAction("&About", self,
                 statusTip="Show the application's About box",
                 triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
                 statusTip="Show the Qt library's About box",
-                triggered=QtGui.qApp.aboutQt)
+                triggered=QtWidgets.qApp.aboutQt)
 
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
@@ -234,9 +234,9 @@ class MainWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("Ready")
 
     def createDockWindows(self):
-        dock = QtGui.QDockWidget("Customers", self)
+        dock = QtWidgets.QDockWidget("Customers", self)
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
-        self.customerList = QtGui.QListWidget(dock)
+        self.customerList = QtWidgets.QListWidget(dock)
         self.customerList.addItems((
             "John Doe, Harmony Enterprises, 12 Lakeside, Ambleton",
             "Jane Doe, Memorabilia, 23 Watersedge, Beaton",
@@ -248,8 +248,8 @@ class MainWindow(QtGui.QMainWindow):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
         self.viewMenu.addAction(dock.toggleViewAction())
 
-        dock = QtGui.QDockWidget("Paragraphs", self)
-        self.paragraphsList = QtGui.QListWidget(dock)
+        dock = QtWidgets.QDockWidget("Paragraphs", self)
+        self.paragraphsList = QtWidgets.QListWidget(dock)
         self.paragraphsList.addItems((
             "Thank you for your payment which we have received today.",
             "Your order has been dispatched and should be with you within "
@@ -280,7 +280,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())
