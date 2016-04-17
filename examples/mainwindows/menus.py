@@ -23,30 +23,30 @@
 #
 ############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        widget = QtGui.QWidget()
+        widget = QtWidgets.QWidget()
         self.setCentralWidget(widget)
 
-        topFiller = QtGui.QWidget()
-        topFiller.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Expanding)
+        topFiller = QtWidgets.QWidget()
+        topFiller.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Expanding)
 
-        self.infoLabel = QtGui.QLabel(
+        self.infoLabel = QtWidgets.QLabel(
                 "<i>Choose a menu option, or right-click to invoke a context menu</i>",
                 alignment=QtCore.Qt.AlignCenter)
-        self.infoLabel.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Sunken)
+        self.infoLabel.setFrameStyle(QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Sunken)
 
-        bottomFiller = QtGui.QWidget()
-        bottomFiller.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Expanding)
+        bottomFiller = QtWidgets.QWidget()
+        bottomFiller.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Expanding)
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.setContentsMargins(5, 5, 5, 5)
         vbox.addWidget(topFiller)
         vbox.addWidget(self.infoLabel)
@@ -64,7 +64,7 @@ class MainWindow(QtGui.QMainWindow):
         self.resize(480,320)
 
     def contextMenuEvent(self, event):
-        menu = QtGui.QMenu(self)
+        menu = QtWidgets.QMenu(self)
         menu.addAction(self.cutAct)
         menu.addAction(self.copyAct)
         menu.addAction(self.pasteAct)
@@ -123,7 +123,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def about(self):
         self.infoLabel.setText("Invoked <b>Help|About</b>")
-        QtGui.QMessageBox.about(self, "About Menu",
+        QtWidgets.QMessageBox.about(self, "About Menu",
                 "The <b>Menu</b> example shows how to create menu-bar menus "
                 "and context menus.")
 
@@ -131,49 +131,49 @@ class MainWindow(QtGui.QMainWindow):
         self.infoLabel.setText("Invoked <b>Help|About Qt</b>")
 
     def createActions(self):
-        self.newAct = QtGui.QAction("&New", self,
+        self.newAct = QtWidgets.QAction("&New", self,
                 shortcut=QtGui.QKeySequence.New,
                 statusTip="Create a new file", triggered=self.newFile)
 
-        self.openAct = QtGui.QAction("&Open...", self,
+        self.openAct = QtWidgets.QAction("&Open...", self,
                 shortcut=QtGui.QKeySequence.Open,
                 statusTip="Open an existing file", triggered=self.open)
 
-        self.saveAct = QtGui.QAction("&Save", self,
+        self.saveAct = QtWidgets.QAction("&Save", self,
                 shortcut=QtGui.QKeySequence.Save,
                 statusTip="Save the document to disk", triggered=self.save)
 
-        self.printAct = QtGui.QAction("&Print...", self,
+        self.printAct = QtWidgets.QAction("&Print...", self,
                 shortcut=QtGui.QKeySequence.Print,
                 statusTip="Print the document", triggered=self.print_)
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 statusTip="Exit the application", triggered=self.close)
 
-        self.undoAct = QtGui.QAction("&Undo", self,
+        self.undoAct = QtWidgets.QAction("&Undo", self,
                 shortcut=QtGui.QKeySequence.Undo,
                 statusTip="Undo the last operation", triggered=self.undo)
 
-        self.redoAct = QtGui.QAction("&Redo", self,
+        self.redoAct = QtWidgets.QAction("&Redo", self,
                 shortcut=QtGui.QKeySequence.Redo,
                 statusTip="Redo the last operation", triggered=self.redo)
 
-        self.cutAct = QtGui.QAction("Cu&t", self,
+        self.cutAct = QtWidgets.QAction("Cu&t", self,
                 shortcut=QtGui.QKeySequence.Cut,
                 statusTip="Cut the current selection's contents to the clipboard",
                 triggered=self.cut)
 
-        self.copyAct = QtGui.QAction("&Copy", self,
+        self.copyAct = QtWidgets.QAction("&Copy", self,
                 shortcut=QtGui.QKeySequence.Copy,
                 statusTip="Copy the current selection's contents to the clipboard",
                 triggered=self.copy)
 
-        self.pasteAct = QtGui.QAction("&Paste", self,
+        self.pasteAct = QtWidgets.QAction("&Paste", self,
                 shortcut=QtGui.QKeySequence.Paste,
                 statusTip="Paste the clipboard's contents into the current selection",
                 triggered=self.paste)
 
-        self.boldAct = QtGui.QAction("&Bold", self, checkable=True,
+        self.boldAct = QtWidgets.QAction("&Bold", self, checkable=True,
                 shortcut="Ctrl+B", statusTip="Make the text bold",
                 triggered=self.bold)
 
@@ -181,7 +181,7 @@ class MainWindow(QtGui.QMainWindow):
         boldFont.setBold(True)
         self.boldAct.setFont(boldFont)
 
-        self.italicAct = QtGui.QAction("&Italic", self, checkable=True,
+        self.italicAct = QtWidgets.QAction("&Italic", self, checkable=True,
                 shortcut="Ctrl+I", statusTip="Make the text italic",
                 triggered=self.italic)
 
@@ -189,42 +189,42 @@ class MainWindow(QtGui.QMainWindow):
         italicFont.setItalic(True)
         self.italicAct.setFont(italicFont)
 
-        self.setLineSpacingAct = QtGui.QAction("Set &Line Spacing...", self,
+        self.setLineSpacingAct = QtWidgets.QAction("Set &Line Spacing...", self,
                 statusTip="Change the gap between the lines of a paragraph",
                 triggered=self.setLineSpacing)
 
-        self.setParagraphSpacingAct = QtGui.QAction(
+        self.setParagraphSpacingAct = QtWidgets.QAction(
                 "Set &Paragraph Spacing...", self,
                 statusTip="Change the gap between paragraphs",
                 triggered=self.setParagraphSpacing)
 
-        self.aboutAct = QtGui.QAction("&About", self,
+        self.aboutAct = QtWidgets.QAction("&About", self,
                 statusTip="Show the application's About box",
                 triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
                 statusTip="Show the Qt library's About box",
                 triggered=self.aboutQt)
-        self.aboutQtAct.triggered.connect(QtGui.qApp.aboutQt)
+        self.aboutQtAct.triggered.connect(QtWidgets.qApp.aboutQt)
 
-        self.leftAlignAct = QtGui.QAction("&Left Align", self, checkable=True,
+        self.leftAlignAct = QtWidgets.QAction("&Left Align", self, checkable=True,
                 shortcut="Ctrl+L", statusTip="Left align the selected text",
                 triggered=self.leftAlign)
 
-        self.rightAlignAct = QtGui.QAction("&Right Align", self,
+        self.rightAlignAct = QtWidgets.QAction("&Right Align", self,
                 checkable=True, shortcut="Ctrl+R",
                 statusTip="Right align the selected text",
                 triggered=self.rightAlign)
 
-        self.justifyAct = QtGui.QAction("&Justify", self, checkable=True,
+        self.justifyAct = QtWidgets.QAction("&Justify", self, checkable=True,
                 shortcut="Ctrl+J", statusTip="Justify the selected text",
                 triggered=self.justify)
 
-        self.centerAct = QtGui.QAction("&Center", self, checkable=True,
+        self.centerAct = QtWidgets.QAction("&Center", self, checkable=True,
                 shortcut="Ctrl+C", statusTip="Center the selected text",
                 triggered=self.center)
 
-        self.alignmentGroup = QtGui.QActionGroup(self)
+        self.alignmentGroup = QtWidgets.QActionGroup(self)
         self.alignmentGroup.addAction(self.leftAlignAct)
         self.alignmentGroup.addAction(self.rightAlignAct)
         self.alignmentGroup.addAction(self.justifyAct)
@@ -270,7 +270,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
