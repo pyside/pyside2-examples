@@ -1,71 +1,91 @@
 #!/usr/bin/env python
 
-############################################################################
+#############################################################################
 ##
-## Copyright (C) 2006-2007 Trolltech ASA. All rights reserved.
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
 ##
-## Licensees holding a valid Qt License Agreement may use this file in
-## accordance with the rights, responsibilities and obligations
-## contained therein.  Please consult your licensing agreement or
-## contact sales@trolltech.com if any conditions of this licensing
-## agreement are not clear to you.
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##g
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
 ##
-## Further information about Qt licensing is available at:
-## http://www.trolltech.com/products/qt/licensing.html or by
-## contacting info@trolltech.com.
 ##
-## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 ##
-############################################################################
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self):
         super(Window, self).__init__()
 
-        self.proxyModel = QtGui.QSortFilterProxyModel()
+        self.proxyModel = QtCore.QSortFilterProxyModel()
         self.proxyModel.setDynamicSortFilter(True)
 
-        self.sourceGroupBox = QtGui.QGroupBox("Original Model")
-        self.proxyGroupBox = QtGui.QGroupBox("Sorted/Filtered Model")
+        self.sourceGroupBox = QtWidgets.QGroupBox("Original Model")
+        self.proxyGroupBox = QtWidgets.QGroupBox("Sorted/Filtered Model")
 
-        self.sourceView = QtGui.QTreeView()
+        self.sourceView = QtWidgets.QTreeView()
         self.sourceView.setRootIsDecorated(False)
         self.sourceView.setAlternatingRowColors(True)
 
-        self.proxyView = QtGui.QTreeView()
+        self.proxyView = QtWidgets.QTreeView()
         self.proxyView.setRootIsDecorated(False)
         self.proxyView.setAlternatingRowColors(True)
         self.proxyView.setModel(self.proxyModel)
         self.proxyView.setSortingEnabled(True)
 
-        self.sortCaseSensitivityCheckBox = QtGui.QCheckBox("Case sensitive sorting")
-        self.filterCaseSensitivityCheckBox = QtGui.QCheckBox("Case sensitive filter")
+        self.sortCaseSensitivityCheckBox = QtWidgets.QCheckBox("Case sensitive sorting")
+        self.filterCaseSensitivityCheckBox = QtWidgets.QCheckBox("Case sensitive filter")
 
-        self.filterPatternLineEdit = QtGui.QLineEdit()
-        self.filterPatternLabel = QtGui.QLabel("&Filter pattern:")
+        self.filterPatternLineEdit = QtWidgets.QLineEdit()
+        self.filterPatternLabel = QtWidgets.QLabel("&Filter pattern:")
         self.filterPatternLabel.setBuddy(self.filterPatternLineEdit)
 
-        self.filterSyntaxComboBox = QtGui.QComboBox()
+        self.filterSyntaxComboBox = QtWidgets.QComboBox()
         self.filterSyntaxComboBox.addItem("Regular expression",
                 QtCore.QRegExp.RegExp)
         self.filterSyntaxComboBox.addItem("Wildcard",
                 QtCore.QRegExp.Wildcard)
         self.filterSyntaxComboBox.addItem("Fixed string",
                 QtCore.QRegExp.FixedString)
-        self.filterSyntaxLabel = QtGui.QLabel("Filter &syntax:")
+        self.filterSyntaxLabel = QtWidgets.QLabel("Filter &syntax:")
         self.filterSyntaxLabel.setBuddy(self.filterSyntaxComboBox)
 
-        self.filterColumnComboBox = QtGui.QComboBox()
+        self.filterColumnComboBox = QtWidgets.QComboBox()
         self.filterColumnComboBox.addItem("Subject")
         self.filterColumnComboBox.addItem("Sender")
         self.filterColumnComboBox.addItem("Date")
-        self.filterColumnLabel = QtGui.QLabel("Filter &column:")
+        self.filterColumnLabel = QtWidgets.QLabel("Filter &column:")
         self.filterColumnLabel.setBuddy(self.filterColumnComboBox)
 
         self.filterPatternLineEdit.textChanged.connect(self.filterRegExpChanged)
@@ -74,11 +94,11 @@ class Window(QtGui.QWidget):
         self.filterCaseSensitivityCheckBox.toggled.connect(self.filterRegExpChanged)
         self.sortCaseSensitivityCheckBox.toggled.connect(self.sortChanged)
 
-        sourceLayout = QtGui.QHBoxLayout()
+        sourceLayout = QtWidgets.QHBoxLayout()
         sourceLayout.addWidget(self.sourceView)
         self.sourceGroupBox.setLayout(sourceLayout)
 
-        proxyLayout = QtGui.QGridLayout()
+        proxyLayout = QtWidgets.QGridLayout()
         proxyLayout.addWidget(self.proxyView, 0, 0, 1, 3)
         proxyLayout.addWidget(self.filterPatternLabel, 1, 0)
         proxyLayout.addWidget(self.filterPatternLineEdit, 1, 1, 1, 2)
@@ -90,7 +110,7 @@ class Window(QtGui.QWidget):
         proxyLayout.addWidget(self.sortCaseSensitivityCheckBox, 4, 2)
         self.proxyGroupBox.setLayout(proxyLayout)
 
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.sourceGroupBox)
         mainLayout.addWidget(self.proxyGroupBox)
         self.setLayout(mainLayout)
@@ -176,7 +196,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.setSourceModel(createMailModel(window))
     window.show()

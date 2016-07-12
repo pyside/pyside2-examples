@@ -2,39 +2,59 @@
 
 #############################################################################
 ##
-## Copyright (C) 2006-2006 Trolltech ASA. All rights reserved.
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
 ##
-## Licensees holding a valid Qt License Agreement may use this file in
-## accordance with the rights, responsibilities and obligations
-## contained therein.  Please consult your licensing agreement or
-## contact sales@trolltech.com if any conditions of this licensing
-## agreement are not clear to you.
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
 ##
-## Further information about Qt licensing is available at:
-## http://www.trolltech.com/products/qt/licensing.html or by
-## contacting info@trolltech.com.
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
 ##
-## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
 ##
 #############################################################################
 
 import sys
 import weakref
 import math
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class Edge(QtGui.QGraphicsItem):
+class Edge(QtWidgets.QGraphicsItem):
     Pi = math.pi
     TwoPi = 2.0 * Pi
 
-    Type = QtGui.QGraphicsItem.UserType + 2
+    Type = QtWidgets.QGraphicsItem.UserType + 2
 
     def __init__(self, sourceNode, destNode):
-        QtGui.QGraphicsItem.__init__(self)
+        QtWidgets.QGraphicsItem.__init__(self)
 
         self.arrowSize = 10.0
         self.sourcePoint = QtCore.QPointF()
@@ -122,17 +142,17 @@ class Edge(QtGui.QGraphicsItem):
         painter.drawPolygon(QtGui.QPolygonF([line.p2(), destArrowP1, destArrowP2]))
 
 
-class Node(QtGui.QGraphicsItem):
-    Type = QtGui.QGraphicsItem.UserType + 1
+class Node(QtWidgets.QGraphicsItem):
+    Type = QtWidgets.QGraphicsItem.UserType + 1
 
     def __init__(self, graphWidget):
-        QtGui.QGraphicsItem.__init__(self)
+        QtWidgets.QGraphicsItem.__init__(self)
 
         self.graph = weakref.ref(graphWidget)
         self.edgeList = []
         self.newPos = QtCore.QPointF()
-        self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
-        self.setFlag(QtGui.QGraphicsItem.ItemSendsGeometryChanges)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemSendsGeometryChanges)
         self.setCacheMode(self.DeviceCoordinateCache)
         self.setZValue(-1)
 
@@ -207,7 +227,7 @@ class Node(QtGui.QGraphicsItem):
         painter.drawEllipse(-7, -7, 20, 20)
 
         gradient = QtGui.QRadialGradient(-3, -3, 10)
-        if option.state & QtGui.QStyle.State_Sunken:
+        if option.state & QtWidgets.QStyle.State_Sunken:
             gradient.setCenter(3, 3)
             gradient.setFocalPoint(3, 3)
             gradient.setColorAt(1, QtGui.QColor(QtCore.Qt.yellow).lighter(120))
@@ -221,36 +241,36 @@ class Node(QtGui.QGraphicsItem):
         painter.drawEllipse(-10, -10, 20, 20)
 
     def itemChange(self, change, value):
-        if change == QtGui.QGraphicsItem.ItemPositionChange:
+        if change == QtWidgets.QGraphicsItem.ItemPositionChange:
             for edge in self.edgeList:
                 edge().adjust()
             self.graph().itemMoved()
 
-        return QtGui.QGraphicsItem.itemChange(self, change, value)
+        return QtWidgets.QGraphicsItem.itemChange(self, change, value)
 
     def mousePressEvent(self, event):
         self.update()
-        QtGui.QGraphicsItem.mousePressEvent(self, event)
+        QtWidgets.QGraphicsItem.mousePressEvent(self, event)
 
     def mouseReleaseEvent(self, event):
         self.update()
-        QtGui.QGraphicsItem.mouseReleaseEvent(self, event)
+        QtWidgets.QGraphicsItem.mouseReleaseEvent(self, event)
 
 
-class GraphWidget(QtGui.QGraphicsView):
+class GraphWidget(QtWidgets.QGraphicsView):
     def __init__(self):
-        QtGui.QGraphicsView.__init__(self)
+        QtWidgets.QGraphicsView.__init__(self)
 
         self.timerId = 0
 
-        scene = QtGui.QGraphicsScene(self)
-        scene.setItemIndexMethod(QtGui.QGraphicsScene.NoIndex)
+        scene = QtWidgets.QGraphicsScene(self)
+        scene.setItemIndexMethod(QtWidgets.QGraphicsScene.NoIndex)
         scene.setSceneRect(-200, -200, 400, 400)
         self.setScene(scene)
-        self.setCacheMode(QtGui.QGraphicsView.CacheBackground)
+        self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
         self.setRenderHint(QtGui.QPainter.Antialiasing)
-        self.setTransformationAnchor(QtGui.QGraphicsView.AnchorUnderMouse)
-        self.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
+        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
+        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorViewCenter)
 
         node1 = Node(self)
         node2 = Node(self)
@@ -321,7 +341,7 @@ class GraphWidget(QtGui.QGraphicsView):
                 if isinstance(item, Node):
                     item.setPos(-150 + QtCore.qrand() % 300, -150 + QtCore.qrand() % 300)
         else:
-            QtGui.QGraphicsView.keyPressEvent(self, event)
+            QtWidgets.QGraphicsView.keyPressEvent(self, event)
 
 
     def timerEvent(self, event):
@@ -356,7 +376,7 @@ class GraphWidget(QtGui.QGraphicsView):
         gradient = QtGui.QLinearGradient(sceneRect.topLeft(), sceneRect.bottomRight())
         gradient.setColorAt(0, QtCore.Qt.white)
         gradient.setColorAt(1, QtCore.Qt.lightGray)
-        painter.fillRect(rect.intersect(sceneRect), QtGui.QBrush(gradient))
+        painter.fillRect(rect.intersected(sceneRect), QtGui.QBrush(gradient))
         painter.setBrush(QtCore.Qt.NoBrush)
         painter.drawRect(sceneRect)
 
@@ -385,7 +405,7 @@ class GraphWidget(QtGui.QGraphicsView):
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     QtCore.qsrand(QtCore.QTime(0,0,0).secsTo(QtCore.QTime.currentTime()))
 
     widget = GraphWidget()

@@ -1,13 +1,54 @@
 #!/usr/bin/env python
 
-"""PyQt4 port of the tools/settingseditor example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+"""PySide2 port of the widgets/tools/settingseditor example from Qt v5.x"""
 
 import sys
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
@@ -38,7 +79,7 @@ class MainWindow(QtGui.QMainWindow):
             self.fallbacksAct.setEnabled(True)
 
     def openIniFile(self):
-        fileName, _  = QtGui.QFileDialog.getOpenFileName(self, "Open INI File",
+        fileName, _  = QtWidgets.QFileDialog.getOpenFileName(self, "Open INI File",
                 '', "INI Files (*.ini *.conf)")
 
         if fileName:
@@ -47,7 +88,7 @@ class MainWindow(QtGui.QMainWindow):
             self.fallbacksAct.setEnabled(False)
 
     def openPropertyList(self):
-        fileName, _ = QtGui.QFileDialog.getOpenFileName(self,
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,
                 "Open Property List", '', "Property List Files (*.plist)")
 
         if fileName:
@@ -56,9 +97,9 @@ class MainWindow(QtGui.QMainWindow):
             self.fallbacksAct.setEnabled(False)
 
     def openRegistryPath(self):
-        path, ok = QtGui.QInputDialog.getText(self, "Open Registry Path",
+        path, ok = QtWidgets.QInputDialog.getText(self, "Open Registry Path",
                 "Enter the path in the Windows registry:",
-                QtGui.QLineEdit.Normal, 'HKEY_CURRENT_USER\\')
+                QtWidgets.QLineEdit.Normal, 'HKEY_CURRENT_USER\\')
 
         if ok and path != '':
             settings = QtCore.QSettings(path, QtCore.QSettings.NativeFormat)
@@ -66,47 +107,47 @@ class MainWindow(QtGui.QMainWindow):
             self.fallbacksAct.setEnabled(False)
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About Settings Editor",
+        QtWidgets.QMessageBox.about(self, "About Settings Editor",
                 "The <b>Settings Editor</b> example shows how to access "
                 "application settings using Qt.")
 
     def createActions(self):
-        self.openSettingsAct = QtGui.QAction("&Open Application Settings...",
+        self.openSettingsAct = QtWidgets.QAction("&Open Application Settings...",
                 self, shortcut="Ctrl+O", triggered=self.openSettings)
 
-        self.openIniFileAct = QtGui.QAction("Open I&NI File...", self,
+        self.openIniFileAct = QtWidgets.QAction("Open I&NI File...", self,
                 shortcut="Ctrl+N", triggered=self.openIniFile)
 
-        self.openPropertyListAct = QtGui.QAction("Open Mac &Property List...",
+        self.openPropertyListAct = QtWidgets.QAction("Open macOS &Property List...",
                 self, shortcut="Ctrl+P", triggered=self.openPropertyList)
         if sys.platform != 'darwin':
             self.openPropertyListAct.setEnabled(False)
 
-        self.openRegistryPathAct = QtGui.QAction(
+        self.openRegistryPathAct = QtWidgets.QAction(
                 "Open Windows &Registry Path...", self, shortcut="Ctrl+G",
                 triggered=self.openRegistryPath)
         if sys.platform != 'win32':
             self.openRegistryPathAct.setEnabled(False)
 
-        self.refreshAct = QtGui.QAction("&Refresh", self, shortcut="Ctrl+R",
+        self.refreshAct = QtWidgets.QAction("&Refresh", self, shortcut="Ctrl+R",
                 enabled=False, triggered=self.settingsTree.refresh)
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 triggered=self.close)
 
-        self.autoRefreshAct = QtGui.QAction("&Auto-Refresh", self,
+        self.autoRefreshAct = QtWidgets.QAction("&Auto-Refresh", self,
                 shortcut="Ctrl+A", checkable=True, enabled=False)
         self.autoRefreshAct.triggered[bool].connect(self.settingsTree.setAutoRefresh)
         self.autoRefreshAct.triggered[bool].connect(self.refreshAct.setDisabled)
 
-        self.fallbacksAct = QtGui.QAction("&Fallbacks", self,
+        self.fallbacksAct = QtWidgets.QAction("&Fallbacks", self,
                 shortcut="Ctrl+F", checkable=True, enabled=False)
         self.fallbacksAct.triggered[bool].connect(self.settingsTree.setFallbacksEnabled)
 
-        self.aboutAct = QtGui.QAction("&About", self, triggered=self.about)
+        self.aboutAct = QtWidgets.QAction("&About", self, triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
-                triggered=QtGui.qApp.aboutQt)
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
+                triggered=QtWidgets.qApp.aboutQt)
 
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
@@ -146,23 +187,23 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle("%s - Settings Editor" % niceName)
 
 
-class LocationDialog(QtGui.QDialog):
+class LocationDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(LocationDialog, self).__init__(parent)
 
-        self.formatComboBox = QtGui.QComboBox()
+        self.formatComboBox = QtWidgets.QComboBox()
         self.formatComboBox.addItem("Native")
         self.formatComboBox.addItem("INI")
 
-        self.scopeComboBox = QtGui.QComboBox()
+        self.scopeComboBox = QtWidgets.QComboBox()
         self.scopeComboBox.addItem("User")
         self.scopeComboBox.addItem("System")
 
-        self.organizationComboBox = QtGui.QComboBox()
+        self.organizationComboBox = QtWidgets.QComboBox()
         self.organizationComboBox.addItem("Trolltech")
         self.organizationComboBox.setEditable(True)
 
-        self.applicationComboBox = QtGui.QComboBox()
+        self.applicationComboBox = QtWidgets.QComboBox()
         self.applicationComboBox.addItem("Any")
         self.applicationComboBox.addItem("Application Example")
         self.applicationComboBox.addItem("Assistant")
@@ -171,30 +212,30 @@ class LocationDialog(QtGui.QDialog):
         self.applicationComboBox.setEditable(True)
         self.applicationComboBox.setCurrentIndex(3)
 
-        formatLabel = QtGui.QLabel("&Format:")
+        formatLabel = QtWidgets.QLabel("&Format:")
         formatLabel.setBuddy(self.formatComboBox)
 
-        scopeLabel = QtGui.QLabel("&Scope:")
+        scopeLabel = QtWidgets.QLabel("&Scope:")
         scopeLabel.setBuddy(self.scopeComboBox)
 
-        organizationLabel = QtGui.QLabel("&Organization:")
+        organizationLabel = QtWidgets.QLabel("&Organization:")
         organizationLabel.setBuddy(self.organizationComboBox)
 
-        applicationLabel = QtGui.QLabel("&Application:")
+        applicationLabel = QtWidgets.QLabel("&Application:")
         applicationLabel.setBuddy(self.applicationComboBox)
 
-        self.locationsGroupBox = QtGui.QGroupBox("Setting Locations")
+        self.locationsGroupBox = QtWidgets.QGroupBox("Setting Locations")
 
-        self.locationsTable = QtGui.QTableWidget()
-        self.locationsTable.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-        self.locationsTable.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.locationsTable.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.locationsTable = QtWidgets.QTableWidget()
+        self.locationsTable.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.locationsTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.locationsTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.locationsTable.setColumnCount(2)
         self.locationsTable.setHorizontalHeaderLabels(("Location", "Access"))
-        self.locationsTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.Stretch)
+        self.locationsTable.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.locationsTable.horizontalHeader().resizeSection(1, 180)
 
-        self.buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+        self.buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
 
         self.formatComboBox.activated.connect(self.updateLocationsTable)
         self.scopeComboBox.activated.connect(self.updateLocationsTable)
@@ -203,11 +244,11 @@ class LocationDialog(QtGui.QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
-        locationsLayout = QtGui.QVBoxLayout()
+        locationsLayout = QtWidgets.QVBoxLayout()
         locationsLayout.addWidget(self.locationsTable)
         self.locationsGroupBox.setLayout(locationsLayout)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(formatLabel, 0, 0)
         mainLayout.addWidget(self.formatComboBox, 0, 1)
         mainLayout.addWidget(scopeLabel, 1, 0)
@@ -274,10 +315,10 @@ class LocationDialog(QtGui.QDialog):
                 row = self.locationsTable.rowCount()
                 self.locationsTable.setRowCount(row + 1)
 
-                item0 = QtGui.QTableWidgetItem()
+                item0 = QtWidgets.QTableWidgetItem()
                 item0.setText(settings.fileName())
 
-                item1 = QtGui.QTableWidgetItem()
+                item1 = QtWidgets.QTableWidgetItem()
                 disable = not (settings.childKeys() or settings.childGroups())
 
                 if row == 0:
@@ -286,7 +327,7 @@ class LocationDialog(QtGui.QDialog):
                         disable = False
                     else:
                         item1.setText("Read-only")
-                    self.buttonBox.button(QtGui.QDialogButtonBox.Ok).setDisabled(disable)
+                    self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).setDisabled(disable)
                 else:
                     item1.setText("Read-only fallback")
 
@@ -300,15 +341,15 @@ class LocationDialog(QtGui.QDialog):
         self.locationsTable.setUpdatesEnabled(True)
 
 
-class SettingsTree(QtGui.QTreeWidget):
+class SettingsTree(QtWidgets.QTreeWidget):
     def __init__(self, parent=None):
         super(SettingsTree, self).__init__(parent)
 
         self.setItemDelegate(VariantDelegate(self))
 
         self.setHeaderLabels(("Setting", "Type", "Value"))
-        self.header().setResizeMode(0, QtGui.QHeaderView.Stretch)
-        self.header().setResizeMode(2, QtGui.QHeaderView.Stretch)
+        self.header().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.header().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
 
         self.settings = None
         self.refreshTimer = QtCore.QTimer()
@@ -316,12 +357,12 @@ class SettingsTree(QtGui.QTreeWidget):
         self.autoRefresh = False
 
         self.groupIcon = QtGui.QIcon()
-        self.groupIcon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirClosedIcon),
+        self.groupIcon.addPixmap(self.style().standardPixmap(QtWidgets.QStyle.SP_DirClosedIcon),
                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.groupIcon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon),
+        self.groupIcon.addPixmap(self.style().standardPixmap(QtWidgets.QStyle.SP_DirOpenIcon),
                 QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.keyIcon = QtGui.QIcon()
-        self.keyIcon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_FileIcon))
+        self.keyIcon.addPixmap(self.style().standardPixmap(QtWidgets.QStyle.SP_FileIcon))
 
         self.refreshTimer.timeout.connect(self.maybeRefresh)
 
@@ -356,7 +397,7 @@ class SettingsTree(QtGui.QTreeWidget):
             self.refresh()
 
     def maybeRefresh(self):
-        if self.state() != QtGui.QAbstractItemView.EditingState:
+        if self.state() != QtWidgets.QAbstractItemView.EditingState:
             self.refresh()
 
     def refresh(self):
@@ -449,9 +490,9 @@ class SettingsTree(QtGui.QTreeWidget):
             after = self.childAt(parent, index - 1)
 
         if parent is not None:
-            item = QtGui.QTreeWidgetItem(parent, after)
+            item = QtWidgets.QTreeWidgetItem(parent, after)
         else:
-            item = QtGui.QTreeWidgetItem(self, after)
+            item = QtWidgets.QTreeWidgetItem(self, after)
 
         item.setText(0, text)
         item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
@@ -487,7 +528,7 @@ class SettingsTree(QtGui.QTreeWidget):
             self.deleteItem(parent, newIndex)
 
 
-class VariantDelegate(QtGui.QItemDelegate):
+class VariantDelegate(QtWidgets.QItemDelegate):
     def __init__(self, parent=None):
         super(VariantDelegate, self).__init__(parent)
 
@@ -534,8 +575,8 @@ class VariantDelegate(QtGui.QItemDelegate):
         if index.column() == 2:
             value = index.model().data(index, QtCore.Qt.UserRole)
             if not self.isSupportedType(value):
-                myOption = QtGui.QStyleOptionViewItem(option)
-                myOption.state &= ~QtGui.QStyle.State_Enabled
+                myOption = QtWidgets.QStyleOptionViewItem(option)
+                myOption.state &= ~QtWidgets.QStyle.State_Enabled
                 super(VariantDelegate, self).paint(painter, myOption, index)
                 return
 
@@ -549,7 +590,7 @@ class VariantDelegate(QtGui.QItemDelegate):
         if not self.isSupportedType(originalValue):
             return None
 
-        lineEdit = QtGui.QLineEdit(parent)
+        lineEdit = QtWidgets.QLineEdit(parent)
         lineEdit.setFrame(False)
 
         if isinstance(originalValue, bool):
@@ -675,7 +716,7 @@ class VariantDelegate(QtGui.QItemDelegate):
 
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())

@@ -1,48 +1,89 @@
 #!/usr/bin/env python
 
-"""PyQt4 port of the widgets/tetrix example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+"""PySide2 port of the widgets/widgets/tetrix example from Qt v5.x"""
 
 import random
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
 NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredLShape = range(8)
 
 
-class TetrixWindow(QtGui.QWidget):
+class TetrixWindow(QtWidgets.QWidget):
     def __init__(self):
         super(TetrixWindow, self).__init__()
 
         self.board = TetrixBoard()
 
-        nextPieceLabel = QtGui.QLabel()
-        nextPieceLabel.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Raised)
+        nextPieceLabel = QtWidgets.QLabel()
+        nextPieceLabel.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Raised)
         nextPieceLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.board.setNextPieceLabel(nextPieceLabel)
 
-        scoreLcd = QtGui.QLCDNumber(5)
-        scoreLcd.setSegmentStyle(QtGui.QLCDNumber.Filled)
-        levelLcd = QtGui.QLCDNumber(2)
-        levelLcd.setSegmentStyle(QtGui.QLCDNumber.Filled)
-        linesLcd = QtGui.QLCDNumber(5)
-        linesLcd.setSegmentStyle(QtGui.QLCDNumber.Filled)
+        scoreLcd = QtWidgets.QLCDNumber(5)
+        scoreLcd.setSegmentStyle(QtWidgets.QLCDNumber.Filled)
+        levelLcd = QtWidgets.QLCDNumber(2)
+        levelLcd.setSegmentStyle(QtWidgets.QLCDNumber.Filled)
+        linesLcd = QtWidgets.QLCDNumber(5)
+        linesLcd.setSegmentStyle(QtWidgets.QLCDNumber.Filled)
 
-        startButton = QtGui.QPushButton("&Start")
+        startButton = QtWidgets.QPushButton("&Start")
         startButton.setFocusPolicy(QtCore.Qt.NoFocus)
-        quitButton = QtGui.QPushButton("&Quit")
+        quitButton = QtWidgets.QPushButton("&Quit")
         quitButton.setFocusPolicy(QtCore.Qt.NoFocus)
-        pauseButton = QtGui.QPushButton("&Pause")
+        pauseButton = QtWidgets.QPushButton("&Pause")
         pauseButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
         startButton.clicked.connect(self.board.start)
         pauseButton.clicked.connect(self.board.pause)
-        quitButton.clicked.connect(QtGui.qApp.quit)
+        quitButton.clicked.connect(QtWidgets.qApp.quit)
         self.board.scoreChanged.connect(scoreLcd.display)
         self.board.levelChanged.connect(levelLcd.display)
         self.board.linesRemovedChanged.connect(linesLcd.display)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(self.createLabel("NEXT"), 0, 0)
         layout.addWidget(nextPieceLabel, 1, 0)
         layout.addWidget(self.createLabel("LEVEL"), 2, 0)
@@ -61,12 +102,12 @@ class TetrixWindow(QtGui.QWidget):
         self.resize(550, 370)
 
     def createLabel(self, text):
-        lbl = QtGui.QLabel(text)
+        lbl = QtWidgets.QLabel(text)
         lbl.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom)
         return lbl
 
 
-class TetrixBoard(QtGui.QFrame):
+class TetrixBoard(QtWidgets.QFrame):
     BoardWidth = 10
     BoardHeight = 22
 
@@ -92,7 +133,7 @@ class TetrixBoard(QtGui.QFrame):
         self.level = 0
         self.board = None
 
-        self.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Sunken)
+        self.setFrameStyle(QtWidgets.QFrame.Panel | QtWidgets.QFrame.Sunken)
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.isStarted = False
         self.isPaused = False
@@ -451,7 +492,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = TetrixWindow()
     window.show()
     random.seed(None)

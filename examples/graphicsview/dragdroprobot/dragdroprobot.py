@@ -1,32 +1,52 @@
 #!/usr/bin/env python
 
-############################################################################
+#############################################################################
 ##
-## Copyright (C) 2006-2006 Trolltech ASA. All rights reserved.
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
 ##
-## Licensees holding a valid Qt License Agreement may use this file in
-## accordance with the rights, responsibilities and obligations
-## contained therein.  Please consult your licensing agreement or
-## contact sales@trolltech.com if any conditions of this licensing
-## agreement are not clear to you.
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
 ##
-## Further information about Qt licensing is available at:
-## http://www.trolltech.com/products/qt/licensing.html or by
-## contacting info@trolltech.com.
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
 ##
-## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
-############################################################################
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 import dragdroprobot_rc
 
 
-class ColorItem(QtGui.QGraphicsItem):
+class ColorItem(QtWidgets.QGraphicsItem):
     n = 0
 
     def __init__(self):
@@ -60,7 +80,7 @@ class ColorItem(QtGui.QGraphicsItem):
         self.setCursor(QtCore.Qt.ClosedHandCursor)
 
     def mouseMoveEvent(self, event):
-        if QtCore.QLineF(QtCore.QPointF(event.screenPos()), QtCore.QPointF(event.buttonDownScreenPos(QtCore.Qt.LeftButton))).length() < QtGui.QApplication.startDragDistance():
+        if QtCore.QLineF(QtCore.QPointF(event.screenPos()), QtCore.QPointF(event.buttonDownScreenPos(QtCore.Qt.LeftButton))).length() < QtWidgets.QApplication.startDragDistance():
             return
 
         drag = QtGui.QDrag(event.widget())
@@ -98,7 +118,7 @@ class ColorItem(QtGui.QGraphicsItem):
         self.setCursor(QtCore.Qt.OpenHandCursor)
 
 
-class RobotPart(QtGui.QGraphicsItem):
+class RobotPart(QtWidgets.QGraphicsItem):
     def __init__(self, parent=None):
         super(RobotPart, self).__init__(parent)
 
@@ -214,7 +234,7 @@ class Robot(RobotPart):
         self.animations = []
         for item, pos_x, pos_y, rotation1, rotation2 in settings: 
             item.setPos(pos_x,pos_y)
-            animation = QtGui.QGraphicsItemAnimation()
+            animation = QtWidgets.QGraphicsItemAnimation()
             animation.setItem(item)
             animation.setTimeLine(self.timeline)
             animation.setRotationAt(0, rotation1)
@@ -240,11 +260,11 @@ if __name__== '__main__':
     import sys
     import math
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     QtCore.qsrand(QtCore.QTime(0, 0, 0).secsTo(QtCore.QTime.currentTime()))
 
-    scene = QtGui.QGraphicsScene(-200, -200, 400, 400)
+    scene = QtWidgets.QGraphicsScene(-200, -200, 400, 400)
 
     for i in range(10):
         item = ColorItem()
@@ -253,13 +273,13 @@ if __name__== '__main__':
         scene.addItem(item)
 
     robot = Robot()
-    robot.scale(1.2, 1.2)
+    robot.setTransform(QtGui.QTransform().scale(1.2, 1.2))
     robot.setPos(0, -20)
     scene.addItem(robot)
 
-    view = QtGui.QGraphicsView(scene)
+    view = QtWidgets.QGraphicsView(scene)
     view.setRenderHint(QtGui.QPainter.Antialiasing)
-    view.setViewportUpdateMode(QtGui.QGraphicsView.BoundingRectViewportUpdate)
+    view.setViewportUpdateMode(QtWidgets.QGraphicsView.BoundingRectViewportUpdate)
     view.setBackgroundBrush(QtGui.QColor(230, 200, 167))
     view.setWindowTitle("Drag and Drop Robot")
     view.show()

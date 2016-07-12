@@ -2,14 +2,46 @@
 
 #############################################################################
 ##
-## Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
-## Contact: Qt Software Information (qt-info@nokia.com)
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
 ##
 #############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class SortedDict(dict):
@@ -41,7 +73,7 @@ class SortedDict(dict):
     iterkeys = __iter__
 
 
-class AddressBook(QtGui.QWidget):
+class AddressBook(QtWidgets.QWidget):
     NavigationMode, AddingMode, EditingMode = range(3)
 
     def __init__(self, parent=None):
@@ -52,28 +84,28 @@ class AddressBook(QtGui.QWidget):
         self.oldAddress = ''
         self.currentMode = self.NavigationMode
 
-        nameLabel = QtGui.QLabel("Name:")
-        self.nameLine = QtGui.QLineEdit()
+        nameLabel = QtWidgets.QLabel("Name:")
+        self.nameLine = QtWidgets.QLineEdit()
         self.nameLine.setReadOnly(True)
 
-        addressLabel = QtGui.QLabel("Address:")
-        self.addressText = QtGui.QTextEdit()
+        addressLabel = QtWidgets.QLabel("Address:")
+        self.addressText = QtWidgets.QTextEdit()
         self.addressText.setReadOnly(True)
 
-        self.addButton = QtGui.QPushButton("&Add")
+        self.addButton = QtWidgets.QPushButton("&Add")
         self.addButton.show()
-        self.editButton = QtGui.QPushButton("&Edit")
+        self.editButton = QtWidgets.QPushButton("&Edit")
         self.editButton.setEnabled(False)
-        self.removeButton = QtGui.QPushButton("&Remove")
+        self.removeButton = QtWidgets.QPushButton("&Remove")
         self.removeButton.setEnabled(False)
-        self.submitButton = QtGui.QPushButton("&Submit")
+        self.submitButton = QtWidgets.QPushButton("&Submit")
         self.submitButton.hide()
-        self.cancelButton = QtGui.QPushButton("&Cancel")
+        self.cancelButton = QtWidgets.QPushButton("&Cancel")
         self.cancelButton.hide()
 
-        self.nextButton = QtGui.QPushButton("&Next")
+        self.nextButton = QtWidgets.QPushButton("&Next")
         self.nextButton.setEnabled(False)
-        self.previousButton = QtGui.QPushButton("&Previous")
+        self.previousButton = QtWidgets.QPushButton("&Previous")
         self.previousButton.setEnabled(False)
 
         self.addButton.clicked.connect(self.addContact)
@@ -84,7 +116,7 @@ class AddressBook(QtGui.QWidget):
         self.nextButton.clicked.connect(self.next)
         self.previousButton.clicked.connect(self.previous)
 
-        buttonLayout1 = QtGui.QVBoxLayout()
+        buttonLayout1 = QtWidgets.QVBoxLayout()
         buttonLayout1.addWidget(self.addButton)
         buttonLayout1.addWidget(self.editButton)
         buttonLayout1.addWidget(self.removeButton)
@@ -92,11 +124,11 @@ class AddressBook(QtGui.QWidget):
         buttonLayout1.addWidget(self.cancelButton)
         buttonLayout1.addStretch()
 
-        buttonLayout2 = QtGui.QHBoxLayout()
+        buttonLayout2 = QtWidgets.QHBoxLayout()
         buttonLayout2.addWidget(self.previousButton)
         buttonLayout2.addWidget(self.nextButton)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(nameLabel, 0, 0)
         mainLayout.addWidget(self.nameLine, 0, 1)
         mainLayout.addWidget(addressLabel, 1, 0, QtCore.Qt.AlignTop)
@@ -127,33 +159,33 @@ class AddressBook(QtGui.QWidget):
         address = self.addressText.toPlainText()
 
         if name == "" or address == "":
-            QtGui.QMessageBox.information(self, "Empty Field",
+            QtWidgets.QMessageBox.information(self, "Empty Field",
                     "Please enter a name and address.")
             return
 
         if self.currentMode == self.AddingMode:
             if name not in self.contacts:
                 self.contacts[name] = address
-                QtGui.QMessageBox.information(self, "Add Successful",
+                QtWidgets.QMessageBox.information(self, "Add Successful",
                         "\"%s\" has been added to your address book." % name)
             else:
-                QtGui.QMessageBox.information(self, "Add Unsuccessful",
+                QtWidgets.QMessageBox.information(self, "Add Unsuccessful",
                         "Sorry, \"%s\" is already in your address book." % name)
                 return
 
         elif self.currentMode == self.EditingMode:
             if self.oldName != name:
                 if name not in self.contacts:
-                    QtGui.QMessageBox.information(self, "Edit Successful",
+                    QtWidgets.QMessageBox.information(self, "Edit Successful",
                             "\"%s\" has been edited in your address book." % self.oldName)
                     del self.contacts[self.oldName]
                     self.contacts[name] = address
                 else:
-                    QtGui.QMessageBox.information(self, "Edit Unsuccessful",
+                    QtWidgets.QMessageBox.information(self, "Edit Unsuccessful",
                             "Sorry, \"%s\" is already in your address book." % name)
                     return
             elif self.oldAddress != address:
-                QtGui.QMessageBox.information(self, "Edit Successful",
+                QtWidgets.QMessageBox.information(self, "Edit Successful",
                         "\"%s\" has been edited in your address book." % name)
                 self.contacts[name] = address
 
@@ -169,15 +201,15 @@ class AddressBook(QtGui.QWidget):
         address = self.addressText.toPlainText()
 
         if name in self.contacts:
-            button = QtGui.QMessageBox.question(self, "Confirm Remove",
+            button = QtWidgets.QMessageBox.question(self, "Confirm Remove",
                     "Are you sure you want to remove \"%s\"?" % name,
-                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
-            if button == QtGui.QMessageBox.Yes:
+            if button == QtWidgets.QMessageBox.Yes:
                 self.previous()
                 del self.contacts[name]
 
-                QtGui.QMessageBox.information(self, "Remove Successful",
+                QtWidgets.QMessageBox.information(self, "Remove Successful",
                         "\"%s\" has been removed from your address book." % name)
 
         self.updateInterface(self.NavigationMode)
@@ -261,7 +293,7 @@ class AddressBook(QtGui.QWidget):
 if __name__ == '__main__':
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     addressBook = AddressBook()
     addressBook.show()

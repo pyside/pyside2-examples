@@ -1,40 +1,81 @@
 #!/usr/bin/env python
 
-"""PySide port of the network/fortuneclient example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui, QtNetwork
+"""PySide2 port of the network/fortuneclient example from Qt v5.x"""
+
+from PySide2 import QtCore, QtGui, QtWidgets, QtNetwork
 
 
-class Client(QtGui.QDialog):
+class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
 
         self.blockSize = 0
         self.currentFortune = ''
 
-        hostLabel = QtGui.QLabel("&Server name:")
-        portLabel = QtGui.QLabel("S&erver port:")
+        hostLabel = QtWidgets.QLabel("&Server name:")
+        portLabel = QtWidgets.QLabel("S&erver port:")
 
-        self.hostLineEdit = QtGui.QLineEdit('Localhost')
-        self.portLineEdit = QtGui.QLineEdit()
+        self.hostLineEdit = QtWidgets.QLineEdit('Localhost')
+        self.portLineEdit = QtWidgets.QLineEdit()
         self.portLineEdit.setValidator(QtGui.QIntValidator(1, 65535, self))
 
         hostLabel.setBuddy(self.hostLineEdit)
         portLabel.setBuddy(self.portLineEdit)
 
-        self.statusLabel = QtGui.QLabel("This examples requires that you run "
+        self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
                 "the Fortune Server example as well.")
 
-        self.getFortuneButton = QtGui.QPushButton("Get Fortune")
+        self.getFortuneButton = QtWidgets.QPushButton("Get Fortune")
         self.getFortuneButton.setDefault(True)
         self.getFortuneButton.setEnabled(False)
 
-        quitButton = QtGui.QPushButton("Quit")
+        quitButton = QtWidgets.QPushButton("Quit")
 
-        buttonBox = QtGui.QDialogButtonBox()
+        buttonBox = QtWidgets.QDialogButtonBox()
         buttonBox.addButton(self.getFortuneButton,
-                QtGui.QDialogButtonBox.ActionRole)
-        buttonBox.addButton(quitButton, QtGui.QDialogButtonBox.RejectRole)
+                QtWidgets.QDialogButtonBox.ActionRole)
+        buttonBox.addButton(quitButton, QtWidgets.QDialogButtonBox.RejectRole)
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
 
@@ -45,7 +86,7 @@ class Client(QtGui.QDialog):
         self.tcpSocket.readyRead.connect(self.readFortune)
         self.tcpSocket.error.connect(self.displayError)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(hostLabel, 0, 0)
         mainLayout.addWidget(self.hostLineEdit, 0, 1)
         mainLayout.addWidget(portLabel, 1, 0)
@@ -98,16 +139,16 @@ class Client(QtGui.QDialog):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
             pass
         elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
-            QtGui.QMessageBox.information(self, "Fortune Client",
+            QtWidgets.QMessageBox.information(self, "Fortune Client",
                     "The host was not found. Please check the host name and "
                     "port settings.")
         elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
-            QtGui.QMessageBox.information(self, "Fortune Client",
+            QtWidgets.QMessageBox.information(self, "Fortune Client",
                     "The connection was refused by the peer. Make sure the "
                     "fortune server is running, and check that the host name "
                     "and port settings are correct.")
         else:
-            QtGui.QMessageBox.information(self, "Fortune Client",
+            QtWidgets.QMessageBox.information(self, "Fortune Client",
                     "The following error occurred: %s." % self.tcpSocket.errorString())
 
         self.getFortuneButton.setEnabled(True)
@@ -121,7 +162,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     client = Client()
     client.show()
     sys.exit(client.exec_())

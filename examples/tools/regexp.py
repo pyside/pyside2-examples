@@ -1,35 +1,76 @@
 #!/usr/bin/env python
 
-"""PyQt4 port of the tools/regexp example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+"""PySide2 port of the widgets/tools/regexp example from Qt v5.x"""
+
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class RegExpDialog(QtGui.QDialog):
+class RegExpDialog(QtWidgets.QDialog):
     MaxCaptures = 6
 
     def __init__(self, parent=None):
         super(RegExpDialog, self).__init__(parent)
 
-        self.patternComboBox = QtGui.QComboBox()
+        self.patternComboBox = QtWidgets.QComboBox()
         self.patternComboBox.setEditable(True)
-        self.patternComboBox.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Preferred)
+        self.patternComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Preferred)
 
-        patternLabel = QtGui.QLabel("&Pattern:")
+        patternLabel = QtWidgets.QLabel("&Pattern:")
         patternLabel.setBuddy(self.patternComboBox)
 
-        self.escapedPatternLineEdit = QtGui.QLineEdit()
+        self.escapedPatternLineEdit = QtWidgets.QLineEdit()
         self.escapedPatternLineEdit.setReadOnly(True)
         palette = self.escapedPatternLineEdit.palette()
         palette.setBrush(QtGui.QPalette.Base,
                 palette.brush(QtGui.QPalette.Disabled, QtGui.QPalette.Base))
         self.escapedPatternLineEdit.setPalette(palette)
 
-        escapedPatternLabel = QtGui.QLabel("&Escaped Pattern:")
+        escapedPatternLabel = QtWidgets.QLabel("&Escaped Pattern:")
         escapedPatternLabel.setBuddy(self.escapedPatternLineEdit)
 
-        self.syntaxComboBox = QtGui.QComboBox()
+        self.syntaxComboBox = QtWidgets.QComboBox()
         self.syntaxComboBox.addItem("Regular expression v1",
                 QtCore.QRegExp.RegExp)
         self.syntaxComboBox.addItem("Regular expression v2",
@@ -38,43 +79,43 @@ class RegExpDialog(QtGui.QDialog):
         self.syntaxComboBox.addItem("Fixed string",
                 QtCore.QRegExp.FixedString)
 
-        syntaxLabel = QtGui.QLabel("&Pattern Syntax:")
+        syntaxLabel = QtWidgets.QLabel("&Pattern Syntax:")
         syntaxLabel.setBuddy(self.syntaxComboBox)
 
-        self.textComboBox = QtGui.QComboBox()
+        self.textComboBox = QtWidgets.QComboBox()
         self.textComboBox.setEditable(True)
-        self.textComboBox.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Preferred)
+        self.textComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Preferred)
 
-        textLabel = QtGui.QLabel("&Text:")
+        textLabel = QtWidgets.QLabel("&Text:")
         textLabel.setBuddy(self.textComboBox)
 
-        self.caseSensitiveCheckBox = QtGui.QCheckBox("Case &Sensitive")
+        self.caseSensitiveCheckBox = QtWidgets.QCheckBox("Case &Sensitive")
         self.caseSensitiveCheckBox.setChecked(True)
-        self.minimalCheckBox = QtGui.QCheckBox("&Minimal")
+        self.minimalCheckBox = QtWidgets.QCheckBox("&Minimal")
 
-        indexLabel = QtGui.QLabel("Index of Match:")
-        self.indexEdit = QtGui.QLineEdit()
+        indexLabel = QtWidgets.QLabel("Index of Match:")
+        self.indexEdit = QtWidgets.QLineEdit()
         self.indexEdit.setReadOnly(True)
 
-        matchedLengthLabel = QtGui.QLabel("Matched Length:")
-        self.matchedLengthEdit = QtGui.QLineEdit()
+        matchedLengthLabel = QtWidgets.QLabel("Matched Length:")
+        self.matchedLengthEdit = QtWidgets.QLineEdit()
         self.matchedLengthEdit.setReadOnly(True)
 
         self.captureLabels = []
         self.captureEdits = []
         for i in range(self.MaxCaptures):
-            self.captureLabels.append(QtGui.QLabel("Capture %d:" % i))
-            self.captureEdits.append(QtGui.QLineEdit())
+            self.captureLabels.append(QtWidgets.QLabel("Capture %d:" % i))
+            self.captureEdits.append(QtWidgets.QLineEdit())
             self.captureEdits[i].setReadOnly(True)
         self.captureLabels[0].setText("Match:")
 
-        checkBoxLayout = QtGui.QHBoxLayout()
+        checkBoxLayout = QtWidgets.QHBoxLayout()
         checkBoxLayout.addWidget(self.caseSensitiveCheckBox)
         checkBoxLayout.addWidget(self.minimalCheckBox)
         checkBoxLayout.addStretch(1)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(patternLabel, 0, 0)
         mainLayout.addWidget(self.patternComboBox, 0, 1)
         mainLayout.addWidget(escapedPatternLabel, 1, 0)
@@ -139,8 +180,8 @@ class RegExpDialog(QtGui.QDialog):
         self.matchedLengthEdit.setText(str(rx.matchedLength()))
 
         for i in range(self.MaxCaptures):
-            self.captureLabels[i].setEnabled(i <= rx.numCaptures())
-            self.captureEdits[i].setEnabled(i <= rx.numCaptures())
+            self.captureLabels[i].setEnabled(i <= rx.captureCount())
+            self.captureEdits[i].setEnabled(i <= rx.captureCount())
             self.captureEdits[i].setText(rx.cap(i))
 
         self.setUpdatesEnabled(True)
@@ -149,6 +190,6 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     dialog = RegExpDialog()
     sys.exit(dialog.exec_())

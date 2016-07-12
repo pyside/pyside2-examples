@@ -1,9 +1,48 @@
 #!/usr/bin/python
 
-# Fetch More Example
-# Ported to PyQt4 by Darryl Wallace, 2009 - wallacdj@gmail.com
+#############################################################################
+##
+## Copyright (C) 2009 Darryl Wallace, 2009 <wallacdj@gmail.com>
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##g
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class FileListModel(QtCore.QAbstractListModel):
@@ -30,10 +69,11 @@ class FileListModel(QtCore.QAbstractListModel):
 
         if role == QtCore.Qt.BackgroundRole:
             batch = (index.row() // 100) % 2
+#  FIXME: QGuiApplication::palette() required
             if batch == 0:
-                return QtGui.qApp.palette().base()
+                return QtWidgets.qApp.palette().base()
 
-            return QtGui.qApp.palette().alternateBase()
+            return QtWidgets.qApp.palette().alternateBase()
 
         return None
 
@@ -56,33 +96,34 @@ class FileListModel(QtCore.QAbstractListModel):
     def setDirPath(self, path):
         dir = QtCore.QDir(path)
 
+        self.beginResetModel()
         self.fileList = list(dir.entryList())
         self.fileCount = 0
-        self.reset()
+        self.endResetModel()
 
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
 
         model = FileListModel(self)
         model.setDirPath(QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.PrefixPath))
 
-        label = QtGui.QLabel("Directory")
-        lineEdit = QtGui.QLineEdit()
+        label = QtWidgets.QLabel("Directory")
+        lineEdit = QtWidgets.QLineEdit()
         label.setBuddy(lineEdit)
 
-        view = QtGui.QListView()
+        view = QtWidgets.QListView()
         view.setModel(model)
 
-        self.logViewer = QtGui.QTextBrowser()
-        self.logViewer.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred))
+        self.logViewer = QtWidgets.QTextBrowser()
+        self.logViewer.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred))
 
         lineEdit.textChanged.connect(model.setDirPath)
         lineEdit.textChanged.connect(self.logViewer.clear)
         model.numberPopulated.connect(self.updateLog)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(label, 0, 0)
         layout.addWidget(lineEdit, 0, 1)
         layout.addWidget(view, 1, 0, 1, 2)
@@ -99,7 +140,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     window = Window()
     window.show()

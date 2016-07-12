@@ -1,16 +1,52 @@
 #!/usr/bin/env python
 
-# This is only needed for Python v2 but is harmless for Python v3.
-#import sip
-#sip.setapi('QString', 2)
-#sip.setapi('QVariant', 2)
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 import classwizard_rc
 
 
-class ClassWizard(QtGui.QWizard):
+class ClassWizard(QtWidgets.QWizard):
     def __init__(self, parent=None):
         super(ClassWizard, self).__init__(parent)
 
@@ -20,9 +56,9 @@ class ClassWizard(QtGui.QWizard):
         self.addPage(OutputFilesPage())
         self.addPage(ConclusionPage())
 
-        self.setPixmap(QtGui.QWizard.BannerPixmap,
+        self.setPixmap(QtWidgets.QWizard.BannerPixmap,
                 QtGui.QPixmap(':/images/banner.png'))
-        self.setPixmap(QtGui.QWizard.BackgroundPixmap,
+        self.setPixmap(QtWidgets.QWizard.BackgroundPixmap,
                 QtGui.QPixmap(':/images/background.png'))
 
         self.setWindowTitle("Class Wizard")
@@ -88,7 +124,7 @@ class ClassWizard(QtGui.QWizard):
         headerFile = QtCore.QFile(outputDir + '/' + header)
 
         if not headerFile.open(QtCore.QFile.WriteOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(None, "Class Wizard",
+            QtWidgets.QMessageBox.warning(None, "Class Wizard",
                     "Cannot write file %s:\n%s" % (headerFile.fileName(), headerFile.errorString()))
             return
 
@@ -141,7 +177,7 @@ class ClassWizard(QtGui.QWizard):
         implementationFile = QtCore.QFile(outputDir + '/' + implementation)
 
         if not implementationFile.open(QtCore.QFile.WriteOnly | QtCore.QFile.Text):
-            QtGui.QMessageBox.warning(None, "Class Wizard",
+            QtWidgets.QMessageBox.warning(None, "Class Wizard",
                     "Cannot write file %s:\n%s" % (implementationFile.fileName(), implementationFile.errorString()))
             return
 
@@ -150,52 +186,52 @@ class ClassWizard(QtGui.QWizard):
         super(ClassWizard, self).accept()
 
 
-class IntroPage(QtGui.QWizardPage):
+class IntroPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(IntroPage, self).__init__(parent)
 
         self.setTitle("Introduction")
-        self.setPixmap(QtGui.QWizard.WatermarkPixmap,
+        self.setPixmap(QtWidgets.QWizard.WatermarkPixmap,
                 QtGui.QPixmap(':/images/watermark1.png'))
 
-        label = QtGui.QLabel("This wizard will generate a skeleton C++ class "
+        label = QtWidgets.QLabel("This wizard will generate a skeleton C++ class "
                 "definition, including a few functions. You simply need to "
                 "specify the class name and set a few options to produce a "
                 "header file and an implementation file for your new C++ "
                 "class.")
         label.setWordWrap(True)
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(label)
         self.setLayout(layout)
 
 
-class ClassInfoPage(QtGui.QWizardPage):
+class ClassInfoPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(ClassInfoPage, self).__init__(parent)
 
         self.setTitle("Class Information")
         self.setSubTitle("Specify basic information about the class for "
                 "which you want to generate skeleton source code files.")
-        self.setPixmap(QtGui.QWizard.LogoPixmap,
+        self.setPixmap(QtWidgets.QWizard.LogoPixmap,
                 QtGui.QPixmap(':/images/logo1.png'))
 
-        classNameLabel = QtGui.QLabel("&Class name:")
-        classNameLineEdit = QtGui.QLineEdit()
+        classNameLabel = QtWidgets.QLabel("&Class name:")
+        classNameLineEdit = QtWidgets.QLineEdit()
         classNameLabel.setBuddy(classNameLineEdit)
 
-        baseClassLabel = QtGui.QLabel("B&ase class:")
-        baseClassLineEdit = QtGui.QLineEdit()
+        baseClassLabel = QtWidgets.QLabel("B&ase class:")
+        baseClassLineEdit = QtWidgets.QLineEdit()
         baseClassLabel.setBuddy(baseClassLineEdit)
 
-        qobjectMacroCheckBox = QtGui.QCheckBox("Generate Q_OBJECT &macro")
+        qobjectMacroCheckBox = QtWidgets.QCheckBox("Generate Q_OBJECT &macro")
 
-        groupBox = QtGui.QGroupBox("C&onstructor")
+        groupBox = QtWidgets.QGroupBox("C&onstructor")
 
-        qobjectCtorRadioButton = QtGui.QRadioButton("&QObject-style constructor")
-        qwidgetCtorRadioButton = QtGui.QRadioButton("Q&Widget-style constructor")
-        defaultCtorRadioButton = QtGui.QRadioButton("&Default constructor")
-        copyCtorCheckBox = QtGui.QCheckBox("&Generate copy constructor and operator=")
+        qobjectCtorRadioButton = QtWidgets.QRadioButton("&QObject-style constructor")
+        qwidgetCtorRadioButton = QtWidgets.QRadioButton("Q&Widget-style constructor")
+        defaultCtorRadioButton = QtWidgets.QRadioButton("&Default constructor")
+        copyCtorCheckBox = QtWidgets.QCheckBox("&Generate copy constructor and operator=")
 
         defaultCtorRadioButton.setChecked(True)
 
@@ -209,14 +245,14 @@ class ClassInfoPage(QtGui.QWizardPage):
         self.registerField('defaultCtor', defaultCtorRadioButton)
         self.registerField('copyCtor', copyCtorCheckBox)
 
-        groupBoxLayout = QtGui.QVBoxLayout()
+        groupBoxLayout = QtWidgets.QVBoxLayout()
         groupBoxLayout.addWidget(qobjectCtorRadioButton)
         groupBoxLayout.addWidget(qwidgetCtorRadioButton)
         groupBoxLayout.addWidget(defaultCtorRadioButton)
         groupBoxLayout.addWidget(copyCtorCheckBox)
         groupBox.setLayout(groupBoxLayout)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(classNameLabel, 0, 0)
         layout.addWidget(classNameLineEdit, 0, 1)
         layout.addWidget(baseClassLabel, 1, 0)
@@ -226,31 +262,31 @@ class ClassInfoPage(QtGui.QWizardPage):
         self.setLayout(layout)
 
 
-class CodeStylePage(QtGui.QWizardPage):
+class CodeStylePage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(CodeStylePage, self).__init__(parent)
 
         self.setTitle("Code Style Options")
         self.setSubTitle("Choose the formatting of the generated code.")
-        self.setPixmap(QtGui.QWizard.LogoPixmap,
+        self.setPixmap(QtWidgets.QWizard.LogoPixmap,
                 QtGui.QPixmap(':/images/logo2.png'))
 
-        commentCheckBox = QtGui.QCheckBox("&Start generated files with a "
+        commentCheckBox = QtWidgets.QCheckBox("&Start generated files with a "
                 "comment")
         commentCheckBox.setChecked(True)
 
-        protectCheckBox = QtGui.QCheckBox("&Protect header file against "
+        protectCheckBox = QtWidgets.QCheckBox("&Protect header file against "
                 "multiple inclusions")
         protectCheckBox.setChecked(True)
 
-        macroNameLabel = QtGui.QLabel("&Macro name:")
-        self.macroNameLineEdit = QtGui.QLineEdit()
+        macroNameLabel = QtWidgets.QLabel("&Macro name:")
+        self.macroNameLineEdit = QtWidgets.QLineEdit()
         macroNameLabel.setBuddy(self.macroNameLineEdit)
 
-        self.includeBaseCheckBox = QtGui.QCheckBox("&Include base class "
+        self.includeBaseCheckBox = QtWidgets.QCheckBox("&Include base class "
                 "definition")
-        self.baseIncludeLabel = QtGui.QLabel("Base class include:")
-        self.baseIncludeLineEdit = QtGui.QLineEdit()
+        self.baseIncludeLabel = QtWidgets.QLabel("Base class include:")
+        self.baseIncludeLineEdit = QtWidgets.QLineEdit()
         self.baseIncludeLabel.setBuddy(self.baseIncludeLineEdit)
 
         protectCheckBox.toggled.connect(macroNameLabel.setEnabled)
@@ -264,7 +300,7 @@ class CodeStylePage(QtGui.QWizardPage):
         self.registerField('includeBase', self.includeBaseCheckBox)
         self.registerField('baseInclude', self.baseIncludeLineEdit)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.setColumnMinimumWidth(0, 20)
         layout.addWidget(commentCheckBox, 0, 0, 1, 3)
         layout.addWidget(protectCheckBox, 1, 0, 1, 3)
@@ -295,33 +331,33 @@ class CodeStylePage(QtGui.QWizardPage):
             self.baseIncludeLineEdit.setText('"' + baseClass.lower() + '.h"')
 
 
-class OutputFilesPage(QtGui.QWizardPage):
+class OutputFilesPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(OutputFilesPage, self).__init__(parent)
 
         self.setTitle("Output Files")
         self.setSubTitle("Specify where you want the wizard to put the "
                 "generated skeleton code.")
-        self.setPixmap(QtGui.QWizard.LogoPixmap,
+        self.setPixmap(QtWidgets.QWizard.LogoPixmap,
                 QtGui.QPixmap(':/images/logo3.png'))
 
-        outputDirLabel = QtGui.QLabel("&Output directory:")
-        self.outputDirLineEdit = QtGui.QLineEdit()
+        outputDirLabel = QtWidgets.QLabel("&Output directory:")
+        self.outputDirLineEdit = QtWidgets.QLineEdit()
         outputDirLabel.setBuddy(self.outputDirLineEdit)
 
-        headerLabel = QtGui.QLabel("&Header file name:")
-        self.headerLineEdit = QtGui.QLineEdit()
+        headerLabel = QtWidgets.QLabel("&Header file name:")
+        self.headerLineEdit = QtWidgets.QLineEdit()
         headerLabel.setBuddy(self.headerLineEdit)
 
-        implementationLabel = QtGui.QLabel("&Implementation file name:")
-        self.implementationLineEdit = QtGui.QLineEdit()
+        implementationLabel = QtWidgets.QLabel("&Implementation file name:")
+        self.implementationLineEdit = QtWidgets.QLineEdit()
         implementationLabel.setBuddy(self.implementationLineEdit)
 
         self.registerField('outputDir*', self.outputDirLineEdit)
         self.registerField('header*', self.headerLineEdit)
         self.registerField('implementation*', self.implementationLineEdit)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
         layout.addWidget(outputDirLabel, 0, 0)
         layout.addWidget(self.outputDirLineEdit, 0, 1)
         layout.addWidget(headerLabel, 1, 0)
@@ -334,26 +370,26 @@ class OutputFilesPage(QtGui.QWizardPage):
         className = self.field('className')
         self.headerLineEdit.setText(className.lower() + '.h')
         self.implementationLineEdit.setText(className.lower() + '.cpp')
-        self.outputDirLineEdit.setText(QtCore.QDir.convertSeparators(QtCore.QDir.tempPath()))
+        self.outputDirLineEdit.setText(QtCore.QDir.toNativeSeparators(QtCore.QDir.tempPath()))
 
 
-class ConclusionPage(QtGui.QWizardPage):
+class ConclusionPage(QtWidgets.QWizardPage):
     def __init__(self, parent=None):
         super(ConclusionPage, self).__init__(parent)
 
         self.setTitle("Conclusion")
-        self.setPixmap(QtGui.QWizard.WatermarkPixmap,
+        self.setPixmap(QtWidgets.QWizard.WatermarkPixmap,
                 QtGui.QPixmap(':/images/watermark2.png'))
 
-        self.label = QtGui.QLabel()
+        self.label = QtWidgets.QLabel()
         self.label.setWordWrap(True)
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         self.setLayout(layout)
 
     def initializePage(self):
-        finishText = self.wizard().buttonText(QtGui.QWizard.FinishButton)
+        finishText = self.wizard().buttonText(QtWidgets.QWizard.FinishButton)
         finishText.replace('&', '')
         self.label.setText("Click %s to generate the class skeleton." % finishText)
 
@@ -362,7 +398,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     wizard = ClassWizard()
     wizard.show()
     sys.exit(app.exec_())

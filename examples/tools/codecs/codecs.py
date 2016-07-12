@@ -1,8 +1,49 @@
 #!/usr/bin/env python
 
-"""PyQt4 port of the tools/codecs example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+"""PySide2 port of the widgets/tools/codecs example from Qt v5.x"""
+
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
 def codec_name(codec):
@@ -16,12 +57,12 @@ def codec_name(codec):
     return name
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.textEdit = QtGui.QTextEdit()
-        self.textEdit.setLineWrapMode(QtGui.QTextEdit.NoWrap)
+        self.textEdit = QtWidgets.QTextEdit()
+        self.textEdit.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.setCentralWidget(self.textEdit)
 
         self.codecs = []
@@ -38,11 +79,11 @@ class MainWindow(QtGui.QMainWindow):
         self.resize(500, 400)
 
     def open(self):
-        fileName, _ = QtGui.QFileDialog.getOpenFileName(self)
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self)
         if fileName:
             inFile = QtCore.QFile(fileName)
             if not inFile.open(QtCore.QFile.ReadOnly):
-                QtGui.QMessageBox.warning(self, "Codecs",
+                QtWidgets.QMessageBox.warning(self, "Codecs",
                         "Cannot read file %s:\n%s" % (fileName, inFile.errorString()))
                 return
 
@@ -53,11 +94,11 @@ class MainWindow(QtGui.QMainWindow):
                 self.textEdit.setPlainText(self.previewForm.decodedString())
 
     def save(self):
-        fileName = QtGui.QFileDialog.getSaveFileName(self)
+        fileName = QtWidgets.QFileDialog.getSaveFileName(self)
         if fileName:
             outFile = QtCore.QFile(fileName)
             if not outFile.open(QtCore.QFile.WriteOnly|QtCore.QFile.Text):
-                QtGui.QMessageBox.warning(self, "Codecs",
+                QtWidgets.QMessageBox.warning(self, "Codecs",
                         "Cannot write file %s:\n%s" % (fileName, outFile.errorString()))
                 return
 
@@ -69,7 +110,7 @@ class MainWindow(QtGui.QMainWindow):
             out << self.textEdit.toPlainText()
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About Codecs",
+        QtWidgets.QMessageBox.about(self, "About Codecs",
                 "The <b>Codecs</b> example demonstrates how to read and "
                 "write files using various encodings.")
 
@@ -108,38 +149,38 @@ class MainWindow(QtGui.QMainWindow):
         self.codecs = [item[-1] for item in codecMap]
 
     def createActions(self):
-        self.openAct = QtGui.QAction("&Open...", self, shortcut="Ctrl+O",
+        self.openAct = QtWidgets.QAction("&Open...", self, shortcut="Ctrl+O",
                 triggered=self.open)
 
         for codec in self.codecs:
             name = codec_name(codec)
 
-            action = QtGui.QAction(name + '...', self, triggered=self.save)
+            action = QtWidgets.QAction(name + '...', self, triggered=self.save)
             action.setData(name)
             self.saveAsActs.append(action)
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 triggered=self.close)
 
-        self.aboutAct = QtGui.QAction("&About", self, triggered=self.about)
+        self.aboutAct = QtWidgets.QAction("&About", self, triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
-                triggered=QtGui.qApp.aboutQt)
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
+                triggered=QtWidgets.qApp.aboutQt)
 
     def createMenus(self):
-        self.saveAsMenu = QtGui.QMenu("&Save As", self)
+        self.saveAsMenu = QtWidgets.QMenu("&Save As", self)
         for action in self.saveAsActs:
             self.saveAsMenu.addAction(action)
 
         self.saveAsMenu.aboutToShow.connect(self.aboutToShowSaveAsMenu)
 
-        self.fileMenu = QtGui.QMenu("&File", self)
+        self.fileMenu = QtWidgets.QMenu("&File", self)
         self.fileMenu.addAction(self.openAct)
         self.fileMenu.addMenu(self.saveAsMenu)
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.exitAct)
 
-        self.helpMenu = QtGui.QMenu("&Help", self)
+        self.helpMenu = QtWidgets.QMenu("&Help", self)
         self.helpMenu.addAction(self.aboutAct)
         self.helpMenu.addAction(self.aboutQtAct)
 
@@ -148,25 +189,25 @@ class MainWindow(QtGui.QMainWindow):
         self.menuBar().addMenu(self.helpMenu)
 
 
-class PreviewForm(QtGui.QDialog):
+class PreviewForm(QtWidgets.QDialog):
     def __init__(self, parent):
         super(PreviewForm, self).__init__(parent)
 
-        self.encodingComboBox = QtGui.QComboBox()
-        encodingLabel = QtGui.QLabel("&Encoding:")
+        self.encodingComboBox = QtWidgets.QComboBox()
+        encodingLabel = QtWidgets.QLabel("&Encoding:")
         encodingLabel.setBuddy(self.encodingComboBox)
 
-        self.textEdit = QtGui.QTextEdit()
-        self.textEdit.setLineWrapMode(QtGui.QTextEdit.NoWrap)
+        self.textEdit = QtWidgets.QTextEdit()
+        self.textEdit.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.textEdit.setReadOnly(True)
 
-        buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+        buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
 
         self.encodingComboBox.activated.connect(self.updateTextEdit)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(encodingLabel, 0, 0)
         mainLayout.addWidget(self.encodingComboBox, 0, 1)
         mainLayout.addWidget(self.textEdit, 1, 0, 1, 2)
@@ -204,7 +245,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())

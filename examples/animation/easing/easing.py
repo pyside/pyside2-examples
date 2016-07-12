@@ -1,6 +1,47 @@
 #!/usr/bin/env python
 
-from PySide2 import QtCore, QtGui
+#############################################################################
+##
+## Copyright (C) 2010 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+from PySide2 import QtCore, QtGui, QtWidgets
 
 import easing_rc
 from ui_form import Ui_Form
@@ -43,14 +84,14 @@ class Animation(QtCore.QPropertyAnimation):
         else:
             super(Animation, self).updateCurrentTime(currentTime)
 
-# PyQt doesn't support deriving from more than one wrapped class so we use
+# PySide2 doesn't support deriving from more than one wrapped class so we use
 # composition and delegate the property.
 class Pixmap(QtCore.QObject):
     def __init__(self, pix):
         super(Pixmap, self).__init__()
 
-        self.pixmap_item = QtGui.QGraphicsPixmapItem(pix)
-        self.pixmap_item.setCacheMode(QtGui.QGraphicsItem.DeviceCoordinateCache)
+        self.pixmap_item = QtWidgets.QGraphicsPixmapItem(pix)
+        self.pixmap_item.setCacheMode(QtWidgets.QGraphicsItem.DeviceCoordinateCache)
 
     def set_pos(self, pos):
         self.pixmap_item.setPos(pos)
@@ -61,12 +102,12 @@ class Pixmap(QtCore.QObject):
     pos = QtCore.Property(QtCore.QPointF, get_pos, set_pos)
     
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
 
         self.m_iconSize = QtCore.QSize(64, 64)
-        self.m_scene = QtGui.QGraphicsScene()
+        self.m_scene = QtWidgets.QGraphicsScene()
         
         m_ui = Ui_Form()
         m_ui.setupUi(self)
@@ -116,7 +157,8 @@ class Window(QtGui.QWidget):
         curve_types = [(n, c) for n, c in QtCore.QEasingCurve.__dict__.items()
                         if isinstance(c, QtCore.QEasingCurve.Type) \
                             and c != QtCore.QEasingCurve.Custom    \
-                            and c != QtCore.QEasingCurve.NCurveTypes]
+                            and c != QtCore.QEasingCurve.NCurveTypes \
+                            and c != QtCore.QEasingCurve.TCBSpline]
         curve_types.sort(key=lambda ct: ct[1])
         
         painter.begin(pix)
@@ -160,7 +202,7 @@ class Window(QtGui.QWidget):
             painter.strokePath(curvePath, QtGui.QColor(32, 32, 32))
             painter.setRenderHint(QtGui.QPainter.Antialiasing, False)
 
-            item = QtGui.QListWidgetItem()
+            item = QtWidgets.QListWidgetItem()
             item.setIcon(QtGui.QIcon(pix))
             item.setText(curve_name)
             self.m_ui.easingCurvePicker.addItem(item)
@@ -211,7 +253,7 @@ class Window(QtGui.QWidget):
 if __name__ == '__main__':
 
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = Window()
     w.resize(600, 600)
     w.show()

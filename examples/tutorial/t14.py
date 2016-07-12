@@ -1,21 +1,62 @@
 #!/usr/bin/env python
 
-# PyQt tutorial 14
+#############################################################################
+##
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
+
+# PySide2 tutorial 14
 
 
 import sys
 import math
 import random
-from PySide2 import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class LCDRange(QtGui.QWidget):
+class LCDRange(QtWidgets.QWidget):
+    valueChanged = QtCore.Signal(int)
     def __init__(self, text=None, parent=None):
-        if isinstance(text, QtGui.QWidget):
+        if isinstance(text, QtWidgets.QWidget):
             parent = text
             text = None
 
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.init()
 
@@ -23,20 +64,20 @@ class LCDRange(QtGui.QWidget):
             self.setText(text)
 
     def init(self):
-        lcd = QtGui.QLCDNumber(2)
-        self.slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        lcd = QtWidgets.QLCDNumber(2)
+        self.slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider.setRange(0, 99)
         self.slider.setValue(0)
-        self.label = QtGui.QLabel()
+        self.label = QtWidgets.QLabel()
         self.label.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
-        self.label.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        self.label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
 
         self.connect(self.slider, QtCore.SIGNAL("valueChanged(int)"),
                      lcd, QtCore.SLOT("display(int)"))
         self.connect(self.slider, QtCore.SIGNAL("valueChanged(int)"),
                      self, QtCore.SIGNAL("valueChanged(int)"))
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(lcd)
         layout.addWidget(self.slider)
         layout.addWidget(self.label)
@@ -47,6 +88,7 @@ class LCDRange(QtGui.QWidget):
     def value(self):
         return self.slider.value()
 
+    @QtCore.Slot(int)
     def setValue(self, value):
         self.slider.setValue(value)
 
@@ -66,9 +108,14 @@ class LCDRange(QtGui.QWidget):
         self.label.setText(text)
 
 
-class CannonField(QtGui.QWidget):
+class CannonField(QtWidgets.QWidget):
+    angleChanged = QtCore.Signal(int)
+    forceChanged = QtCore.Signal(int)
+    hit = QtCore.Signal()
+    missed = QtCore.Signal()
+    canShoot = QtCore.Signal(bool)
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.currentAngle = 45
         self.currentForce = 0
@@ -88,6 +135,7 @@ class CannonField(QtGui.QWidget):
     def angle(self):
         return self.currentAngle
 
+    @QtCore.Slot(int)
     def setAngle(self, angle):
         if angle < 5:
             angle = 5
@@ -102,6 +150,7 @@ class CannonField(QtGui.QWidget):
     def force(self):
         return self.currentForce
 
+    @QtCore.Slot(int)
     def setForce(self, force):
         if force < 0:
             force = 0
@@ -110,6 +159,7 @@ class CannonField(QtGui.QWidget):
         self.currentForce = force;
         self.emit(QtCore.SIGNAL("forceChanged(int)"), self.currentForce)
 
+    @QtCore.Slot()
     def shoot(self):
         if self.isShooting():
             return
@@ -145,6 +195,7 @@ class CannonField(QtGui.QWidget):
         self.update()
         self.emit(QtCore.SIGNAL("canShoot(bool)"), True)
 
+    @QtCore.Slot()
     def moveShot(self):
         region = QtGui.QRegion(self.shotRect())
         self.timerCount += 1
@@ -179,7 +230,7 @@ class CannonField(QtGui.QWidget):
         if pos.y() >= self.height():
             pos.setY(self.height() - 1)
         rad = math.atan((float(self.rect().bottom()) - pos.y()) / pos.x())
-        self.setAngle(QtCore.qRound(rad * 180 / 3.14159265))
+        self.setAngle(round(rad * 180 / 3.14159265))
 
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -248,7 +299,7 @@ class CannonField(QtGui.QWidget):
         y = y0 + vely * time - 0.5 * gravity * time * time
 
         result = QtCore.QRect(0, 0, 6, 6)
-        result.moveCenter(QtCore.QPoint(QtCore.qRound(x), self.height() - 1 - QtCore.qRound(y)))
+        result.moveCenter(QtCore.QPoint(round(x), self.height() - 1 - round(y)))
         return result
 
     def targetRect(self):
@@ -276,15 +327,15 @@ class CannonField(QtGui.QWidget):
         return QtCore.QSize(400, 300)
 
 
-class GameBoard(QtGui.QWidget):
+class GameBoard(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
-        quit = QtGui.QPushButton("&Quit")
+        quit = QtWidgets.QPushButton("&Quit")
         quit.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
 
         self.connect(quit, QtCore.SIGNAL("clicked()"),
-                     QtGui.qApp, QtCore.SLOT("quit()"))
+                     QtWidgets.qApp, QtCore.SLOT("quit()"))
 
         angle = LCDRange("ANGLE")
         angle.setRange(5, 70)
@@ -292,8 +343,8 @@ class GameBoard(QtGui.QWidget):
         force = LCDRange("FORCE")
         force.setRange(10, 50)
 
-        cannonBox = QtGui.QFrame()
-        cannonBox.setFrameStyle(QtGui.QFrame.WinPanel | QtGui.QFrame.Sunken)
+        cannonBox = QtWidgets.QFrame()
+        cannonBox.setFrameStyle(QtWidgets.QFrame.WinPanel | QtWidgets.QFrame.Sunken)
 
         self.cannonField = CannonField()
 
@@ -310,31 +361,31 @@ class GameBoard(QtGui.QWidget):
         self.connect(self.cannonField, QtCore.SIGNAL("hit()"), self.hit)
         self.connect(self.cannonField, QtCore.SIGNAL("missed()"), self.missed)
 
-        shoot = QtGui.QPushButton("&Shoot")
+        shoot = QtWidgets.QPushButton("&Shoot")
         shoot.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
 
         self.connect(shoot, QtCore.SIGNAL("clicked()"), self.fire)
         self.connect(self.cannonField, QtCore.SIGNAL("canShoot(bool)"),
                      shoot, QtCore.SLOT("setEnabled(bool)"))
 
-        restart = QtGui.QPushButton("&New Game")
+        restart = QtWidgets.QPushButton("&New Game")
         restart.setFont(QtGui.QFont("Times", 18, QtGui.QFont.Bold))
 
         self.connect(restart, QtCore.SIGNAL("clicked()"), self.newGame)
 
-        self.hits = QtGui.QLCDNumber(2)
-        self.shotsLeft = QtGui.QLCDNumber(2)
-        hitsLabel = QtGui.QLabel("HITS")
-        shotsLeftLabel = QtGui.QLabel("SHOTS LEFT")
+        self.hits = QtWidgets.QLCDNumber(2)
+        self.shotsLeft = QtWidgets.QLCDNumber(2)
+        hitsLabel = QtWidgets.QLabel("HITS")
+        shotsLeftLabel = QtWidgets.QLabel("SHOTS LEFT")
 
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Enter),
+        QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Enter),
                         self, self.fire)
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Return),
+        QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Return),
                         self, self.fire)
-        QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Q),
+        QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Q),
                         self, QtCore.SLOT("close()"))
 
-        topLayout = QtGui.QHBoxLayout()
+        topLayout = QtWidgets.QHBoxLayout()
         topLayout.addWidget(shoot)
         topLayout.addWidget(self.hits)
         topLayout.addWidget(hitsLabel)
@@ -343,15 +394,15 @@ class GameBoard(QtGui.QWidget):
         topLayout.addStretch(1)
         topLayout.addWidget(restart)
 
-        leftLayout = QtGui.QVBoxLayout()
+        leftLayout = QtWidgets.QVBoxLayout()
         leftLayout.addWidget(angle)
         leftLayout.addWidget(force)
 
-        cannonLayout = QtGui.QVBoxLayout()
+        cannonLayout = QtWidgets.QVBoxLayout()
         cannonLayout.addWidget(self.cannonField)
         cannonBox.setLayout(cannonLayout)
 
-        gridLayout = QtGui.QGridLayout()
+        gridLayout = QtWidgets.QGridLayout()
         gridLayout.addWidget(quit, 0, 0)
         gridLayout.addLayout(topLayout, 0, 1)
         gridLayout.addLayout(leftLayout, 1, 0)
@@ -365,12 +416,14 @@ class GameBoard(QtGui.QWidget):
 
         self.newGame()
 
+    @QtCore.Slot()
     def fire(self):
         if self.cannonField.gameOver() or self.cannonField.isShooting():
             return
         self.shotsLeft.display(self.shotsLeft.intValue() - 1)
         self.cannonField.shoot()
 
+    @QtCore.Slot()
     def hit(self):
         self.hits.display(self.hits.intValue() + 1)
         if self.shotsLeft.intValue() == 0:
@@ -378,10 +431,12 @@ class GameBoard(QtGui.QWidget):
         else:
             self.cannonField.newTarget()
 
+    @QtCore.Slot()
     def missed(self):
         if self.shotsLeft.intValue() == 0:
             self.cannonField.setGameOver()
 
+    @QtCore.Slot()
     def newGame(self):
         self.shotsLeft.display(15)
         self.hits.display(0)
@@ -389,7 +444,7 @@ class GameBoard(QtGui.QWidget):
         self.cannonField.newTarget()
 
 
-app = QtGui.QApplication(sys.argv)
+app = QtWidgets.QApplication(sys.argv)
 board = GameBoard()
 board.setGeometry(100, 100, 500, 355)
 board.show()

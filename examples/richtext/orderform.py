@@ -1,15 +1,56 @@
 #!/usr/bin/env python
 
-"""PyQt4 port of the richtext/orderform example from Qt v4.x"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-from PySide2 import QtCore, QtGui
+"""PySide2 port of the widgets/richtext/orderform example from Qt v5.x"""
+
+from PySide2 import QtCore, QtGui, QtWidgets, QtPrintSupport
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        fileMenu = QtGui.QMenu("&File", self)
+        fileMenu = QtWidgets.QMenu("&File", self)
         newAction = fileMenu.addAction("&New...")
         newAction.setShortcut("Ctrl+N")
         self.printAction = fileMenu.addAction("&Print...", self.printFile)
@@ -19,7 +60,7 @@ class MainWindow(QtGui.QMainWindow):
         quitAction.setShortcut("Ctrl+Q")
         self.menuBar().addMenu(fileMenu)
 
-        self.letters = QtGui.QTabWidget()
+        self.letters = QtWidgets.QTabWidget()
 
         newAction.triggered.connect(self.openDialog)
         quitAction.triggered.connect(self.close)
@@ -28,7 +69,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle("Order Form")
 
     def createLetter(self, name, address, orderItems, sendOffers):
-        editor = QtGui.QTextEdit()
+        editor = QtWidgets.QTextEdit()
         tabIndex = self.letters.addTab(editor, name)
         self.letters.setCurrentIndex(tabIndex)
 
@@ -147,49 +188,49 @@ class MainWindow(QtGui.QMainWindow):
     def openDialog(self):
         dialog = DetailsDialog("Enter Customer Details", self)
 
-        if dialog.exec_() == QtGui.QDialog.Accepted:
+        if dialog.exec_() == QtWidgets.QDialog.Accepted:
             self.createLetter(dialog.senderName(), dialog.senderAddress(),
                     dialog.orderItems(), dialog.sendOffers())
 
     def printFile(self):
         editor = self.letters.currentWidget()
-        printer = QtGui.QPrinter()
+        printer = QtPrintSupport.QPrinter()
 
-        dialog = QtGui.QPrintDialog(printer, self)
+        dialog = QtPrintSupport.QPrintDialog(printer, self)
         dialog.setWindowTitle("Print Document")
 
         if editor.textCursor().hasSelection():
-            dialog.addEnabledOption(QtGui.QAbstractPrintDialog.PrintSelection)
+            dialog.addEnabledOption(QtPrintSupport.QAbstractPrintDialog.PrintSelection)
 
-        if dialog.exec_() != QtGui.QDialog.Accepted:
+        if dialog.exec_() != QtWidgets.QDialog.Accepted:
             return
 
         editor.print_(printer)
 
 
-class DetailsDialog(QtGui.QDialog):
+class DetailsDialog(QtWidgets.QDialog):
     def __init__(self, title, parent):
         super(DetailsDialog, self).__init__(parent)
 
         self.items = ("T-shirt", "Badge", "Reference book", "Coffee cup")
 
-        nameLabel = QtGui.QLabel("Name:")
-        addressLabel = QtGui.QLabel("Address:")
+        nameLabel = QtWidgets.QLabel("Name:")
+        addressLabel = QtWidgets.QLabel("Address:")
         addressLabel.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
 
-        self.nameEdit = QtGui.QLineEdit()
-        self.addressEdit = QtGui.QTextEdit()
-        self.offersCheckBox = QtGui.QCheckBox("Send information about "
+        self.nameEdit = QtWidgets.QLineEdit()
+        self.addressEdit = QtWidgets.QTextEdit()
+        self.offersCheckBox = QtWidgets.QCheckBox("Send information about "
                 "products and special offers:")
 
         self.setupItemsTable()
 
-        buttonBox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+        buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
 
         buttonBox.accepted.connect(self.verify)
         buttonBox.rejected.connect(self.reject)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(nameLabel, 0, 0)
         mainLayout.addWidget(self.nameEdit, 0, 1)
         mainLayout.addWidget(addressLabel, 1, 0)
@@ -202,13 +243,13 @@ class DetailsDialog(QtGui.QDialog):
         self.setWindowTitle(title)
 
     def setupItemsTable(self):
-        self.itemsTable = QtGui.QTableWidget(len(self.items), 2)
+        self.itemsTable = QtWidgets.QTableWidget(len(self.items), 2)
 
         for row, item in enumerate(self.items):
-            name = QtGui.QTableWidgetItem(item)
+            name = QtWidgets.QTableWidgetItem(item)
             name.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
             self.itemsTable.setItem(row, 0, name)
-            quantity = QtGui.QTableWidgetItem('1')
+            quantity = QtWidgets.QTableWidgetItem('1')
             self.itemsTable.setItem(row, 1, quantity)
 
     def orderItems(self):
@@ -235,12 +276,12 @@ class DetailsDialog(QtGui.QDialog):
             self.accept()
             return
 
-        answer = QtGui.QMessageBox.warning(self, "Incomplete Form",
+        answer = QtWidgets.QMessageBox.warning(self, "Incomplete Form",
                 "The form does not contain all the necessary information.\n"
                 "Do you want to discard it?",
-                QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+                QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
 
-        if answer == QtGui.QMessageBox.Yes:
+        if answer == QtWidgets.QMessageBox.Yes:
             self.reject()
 
 
@@ -248,7 +289,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.resize(640, 480)
     window.show()
