@@ -1,79 +1,97 @@
 #!/usr/bin/env python
 
-############################################################################
+#############################################################################
 ##
-## Copyright (C) 2005-2005 Trolltech AS. All rights reserved.
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
 ##
-## This file may be used under the terms of the GNU General Public
-## License version 2.0 as published by the Free Software Foundation
-## and appearing in the file LICENSE.GPL included in the packaging of
-## this file.  Please review the following information to ensure GNU
-## General Public Licensing requirements will be met:
-## http://www.trolltech.com/products/qt/opensource.html
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
 ##
-## If you are unsure which license is appropriate for your use, please
-## review the following information:
-## http://www.trolltech.com/products/qt/licensing.html or contact the
-## sales department at sales@trolltech.com.
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
 ##
-## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
-############################################################################
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-# This is only needed for Python v2 but is harmless for Python v3.
-#import sip
-#sip.setapi('QString', 2)
+"""PySide2 port of the widgets/draganddrop/draggabletext example from Qt v5.x, originating from PyQt"""
 
-from PySide2 import QtCore, QtGui
+from PySide2.QtCore import QFile, QIODevice, QMimeData, QPoint, Qt, QTextStream
+from PySide2.QtGui import QDrag, QPalette, QPixmap
+from PySide2.QtWidgets import QApplication, QFrame, QLabel, QWidget
 
 import draggabletext_rc
 
 
-class DragLabel(QtGui.QLabel):
+class DragLabel(QLabel):
     def __init__(self, text, parent):
         super(DragLabel, self).__init__(text, parent)
 
         self.setAutoFillBackground(True)
-        self.setFrameShape(QtGui.QFrame.Panel)
-        self.setFrameShadow(QtGui.QFrame.Raised)
+        self.setFrameShape(QFrame.Panel)
+        self.setFrameShadow(QFrame.Raised)
 
     def mousePressEvent(self, event):
         hotSpot = event.pos()
 
-        mimeData = QtCore.QMimeData()
+        mimeData = QMimeData()
         mimeData.setText(self.text())
         mimeData.setData('application/x-hotspot',
                 '%d %d' % (hotSpot.x(), hotSpot.y()))
 
-        pixmap = QtGui.QPixmap(self.size())
+        pixmap = QPixmap(self.size())
         self.render(pixmap)
 
-        drag = QtGui.QDrag(self)
+        drag = QDrag(self)
         drag.setMimeData(mimeData)
         drag.setPixmap(pixmap)
         drag.setHotSpot(hotSpot)
 
-        dropAction = drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
+        dropAction = drag.exec_(Qt.CopyAction | Qt.MoveAction, Qt.CopyAction)
 
-        if dropAction == QtCore.Qt.MoveAction:
+        if dropAction == Qt.MoveAction:
             self.close()
             self.update()
 
 
-class DragWidget(QtGui.QWidget):
+class DragWidget(QWidget):
     def __init__(self, parent=None):
         super(DragWidget, self).__init__(parent)
 
-        dictionaryFile = QtCore.QFile(':/dictionary/words.txt')
-        dictionaryFile.open(QtCore.QIODevice.ReadOnly)
+        dictionaryFile = QFile(':/dictionary/words.txt')
+        dictionaryFile.open(QIODevice.ReadOnly)
 
         x = 5
         y = 5
 
-        for word in QtCore.QTextStream(dictionaryFile).readAll().split():
+        for word in QTextStream(dictionaryFile).readAll().split():
             wordLabel = DragLabel(word, self)
             wordLabel.move(x, y)
             wordLabel.show()
@@ -83,7 +101,7 @@ class DragWidget(QtGui.QWidget):
                 y += wordLabel.height() + 2
 
         newPalette = self.palette()
-        newPalette.setColor(QtGui.QPalette.Window, QtCore.Qt.white)
+        newPalette.setColor(QPalette.Window, Qt.white)
         self.setPalette(newPalette)
 
         self.setAcceptDrops(True)
@@ -93,7 +111,7 @@ class DragWidget(QtGui.QWidget):
     def dragEnterEvent(self, event):
         if event.mimeData().hasText():
             if event.source() in self.children():
-                event.setDropAction(QtCore.Qt.MoveAction)
+                event.setDropAction(Qt.MoveAction)
                 event.accept()
             else:
                 event.acceptProposedAction()
@@ -105,7 +123,7 @@ class DragWidget(QtGui.QWidget):
             mime = event.mimeData()
             pieces = mime.text().split()
             position = event.pos()
-            hotSpot = QtCore.QPoint()
+            hotSpot = QPoint()
 
             hotSpotPos = mime.data('application/x-hotspot').split(' ')
             if len(hotSpotPos) == 2:
@@ -117,10 +135,10 @@ class DragWidget(QtGui.QWidget):
                 newLabel.move(position - hotSpot)
                 newLabel.show()
 
-                position += QtCore.QPoint(newLabel.width(), 0)
+                position += QPoint(newLabel.width(), 0)
 
             if event.source() in self.children():
-                event.setDropAction(QtCore.Qt.MoveAction)
+                event.setDropAction(Qt.MoveAction)
                 event.accept()
             else:
                 event.acceptProposedAction()
@@ -132,7 +150,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = DragWidget()
     window.show()
     sys.exit(app.exec_())

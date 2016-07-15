@@ -1,43 +1,64 @@
 #!/usr/bin/env python
 
-"""***************************************************************************
-**
-** Copyright (C) 2005-2005 Trolltech AS. All rights reserved.
-**
-** This file is part of the example classes of the Qt Toolkit.
-**
-** This file may be used under the terms of the GNU General Public
-** License version 2.0 as published by the Free Software Foundation
-** and appearing in the file LICENSE.GPL included in the packaging of
-** this file.  Please review the following information to ensure GNU
-** General Public Licensing requirements will be met:
-** http://www.trolltech.com/products/qt/opensource.html
-**
-** If you are unsure which license is appropriate for your use, please
-** review the following information:
-** http://www.trolltech.com/products/qt/licensing.html or contact the
-** sales department at sales@trolltech.com.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-***************************************************************************"""
+#############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+#############################################################################
 
-import sys
-from PySide2 import QtCore, QtGui
+"""PySide2 port of the widgets/painting/concentriccircles example from Qt v5.x, originating from PyQt"""
+
+from PySide2.QtCore import QRect, QRectF, QSize, Qt, QTimer
+from PySide2.QtGui import QColor, QPainter, QPalette, QPen
+from PySide2.QtWidgets import (QApplication, QFrame, QGridLayout, QLabel,
+        QSizePolicy, QWidget)
 
 
-class CircleWidget(QtGui.QWidget):
-    def __init__(self, parent = None):
-        QtGui.QWidget.__init__(self, parent)
+class CircleWidget(QWidget):
+    def __init__(self, parent=None):
+        super(CircleWidget, self).__init__(parent)
 
         self.floatBased = False
         self.antialiased = False
         self.frameNo = 0
 
-        self.setBackgroundRole(QtGui.QPalette.Base)
-        self.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                           QtGui.QSizePolicy.Expanding)
+        self.setBackgroundRole(QPalette.Base)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def setFloatBased(self, floatBased):
         self.floatBased = floatBased
@@ -48,82 +69,79 @@ class CircleWidget(QtGui.QWidget):
         self.update()
 
     def minimumSizeHint(self):
-        return QtCore.QSize(50, 50)
+        return QSize(50, 50)
 
     def sizeHint(self):
-        return QtCore.QSize(180, 180)
+        return QSize(180, 180)
 
     def nextAnimationFrame(self):
         self.frameNo += 1
         self.update()
 
     def paintEvent(self, event):
-        painter = QtGui.QPainter()
-        painter.begin(self)
-        painter.setRenderHint(QtGui.QPainter.Antialiasing, self.antialiased)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing, self.antialiased)
         painter.translate(self.width() / 2, self.height() / 2)
 
         for diameter in range(0, 256, 9):
             delta = abs((self.frameNo % 128) - diameter / 2)
             alpha = 255 - (delta * delta) / 4 - diameter
             if alpha > 0:
-                painter.setPen(QtGui.QPen(QtGui.QColor(0, diameter / 2, 127, alpha), 3))
+                painter.setPen(QPen(QColor(0, diameter / 2, 127, alpha), 3))
 
                 if self.floatBased:
-                    painter.drawEllipse(QtCore.QRectF(-diameter / 2.0, -diameter / 2.0,
-                                                      diameter, diameter))
+                    painter.drawEllipse(QRectF(-diameter / 2.0,
+                            -diameter / 2.0, diameter, diameter))
                 else:
-                    painter.drawEllipse(QtCore.QRect(-diameter / 2, -diameter / 2,
-                                                     diameter, diameter))
-
-        painter.end()
+                    painter.drawEllipse(QRect(-diameter / 2,
+                            -diameter / 2, diameter, diameter))
 
 
-class Window(QtGui.QWidget):
-    def __init__(self, parent = None):
-        QtGui.QWidget.__init__(self, parent)
+class Window(QWidget):
+    def __init__(self):
+        super(Window, self).__init__()
 
-        self.aliasedLabel = self.createLabel(self.tr("Aliased"))
-        self.antialiasedLabel = self.createLabel(self.tr("Antialiased"))
-        self.intLabel = self.createLabel(self.tr("Int"))
-        self.floatLabel = self.createLabel(self.tr("Float"))
+        aliasedLabel = self.createLabel("Aliased")
+        antialiasedLabel = self.createLabel("Antialiased")
+        intLabel = self.createLabel("Int")
+        floatLabel = self.createLabel("Float")
 
-        layout = QtGui.QGridLayout()
-        layout.addWidget(self.aliasedLabel, 0, 1)
-        layout.addWidget(self.antialiasedLabel, 0, 2)
-        layout.addWidget(self.intLabel, 1, 0)
-        layout.addWidget(self.floatLabel, 2, 0)
+        layout = QGridLayout()
+        layout.addWidget(aliasedLabel, 0, 1)
+        layout.addWidget(antialiasedLabel, 0, 2)
+        layout.addWidget(intLabel, 1, 0)
+        layout.addWidget(floatLabel, 2, 0)
 
-        timer = QtCore.QTimer(self)
+        timer = QTimer(self)
 
-        self.circleWidgets = []
         for i in range(2):
-            self.circleWidgets.append([None]*2)
             for j in range(2):
-                self.circleWidgets[i][j] = CircleWidget()
-                self.circleWidgets[i][j].setAntialiased(j != 0)
-                self.circleWidgets[i][j].setFloatBased(i != 0)
+                w = CircleWidget()
+                w.setAntialiased(j != 0)
+                w.setFloatBased(i != 0)
 
-                self.connect(timer, QtCore.SIGNAL("timeout()"),
-                             self.circleWidgets[i][j].nextAnimationFrame)
+                timer.timeout.connect(w.nextAnimationFrame)
 
-                layout.addWidget(self.circleWidgets[i][j], i + 1, j + 1)
+                layout.addWidget(w, i + 1, j + 1)
 
         timer.start(100)
         self.setLayout(layout)
 
-        self.setWindowTitle(self.tr("Concentric Circles"))
+        self.setWindowTitle("Concentric Circles")
 
     def createLabel(self, text):
-        label = QtGui.QLabel(text)
-        label.setAlignment(QtCore.Qt.AlignCenter)
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignCenter)
         label.setMargin(2)
-        label.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Sunken)
+        label.setFrameStyle(QFrame.Box | QFrame.Sunken)
         return label
 
 
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+if __name__ == '__main__':
+
+    import sys
+
+    app = QApplication(sys.argv)
     window = Window()
     window.show()
     sys.exit(app.exec_())
