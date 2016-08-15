@@ -3,7 +3,7 @@
 """PySide port of the painting/svgviewer example from Qt v4.x"""
 
 import sys
-from PySide2 import QtCore, QtGui, QtOpenGL, QtSvg
+from Qt import QtCore, QtGui, QtOpenGL, QtSvg
 
 import svgviewer_rc
 

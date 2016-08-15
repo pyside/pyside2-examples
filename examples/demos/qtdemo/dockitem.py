@@ -1,4 +1,4 @@
-from PySide2 import QtGui
+from Qt import QtGui
 
 from colors import Colors
 from demoitem import DemoItem

@@ -48,7 +48,7 @@ from PySide.QtGui import QDesktopWidget, QDialog, QDialogButtonBox
 from QtMobility.PublishSubscribe import QValueSpaceSubscriber
 
 try:
-    from PySide2 import QtMaemo5
+    from Qt import QtMaemo5
     USE_MAEMO_5 = True
     from subscriberdialog_hor_ui import Ui_SubscriberDialog
 except:

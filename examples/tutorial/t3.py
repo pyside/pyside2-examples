@@ -4,7 +4,7 @@
 
 
 import sys
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 app = QtGui.QApplication(sys.argv)

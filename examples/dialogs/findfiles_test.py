@@ -1,5 +1,5 @@
 from findfiles import Window
-from PySide2 import QtCore
+from Qt import QtCore
 
 
 #===================================================================================================

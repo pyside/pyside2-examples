@@ -4,7 +4,7 @@
 # which was an adaptation of the original C++ Qt's examples.
 
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import animatedtiles_rc
 

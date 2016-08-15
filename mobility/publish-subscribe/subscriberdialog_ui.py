@@ -7,7 +7,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 class Ui_SubscriberDialog(object):
     def setupUi(self, SubscriberDialog):

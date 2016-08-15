@@ -2,7 +2,7 @@
 
 """PyQt4 port of the network/http example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui, QtNetwork, QtUiTools
+from Qt import QtCore, QtGui, QtNetwork, QtUiTools
 
 
 class HttpWindow(QtGui.QDialog):

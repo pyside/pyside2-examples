@@ -24,7 +24,7 @@
 ############################################################################
 
 # This is only needed for Python v2 but is harmless for Python v3.
-from PySide2 import QtCore, QtGui, QtSql
+from Qt import QtCore, QtGui, QtSql
 
 import connection
 

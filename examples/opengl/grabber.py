@@ -26,7 +26,7 @@
 import sys
 import math
 
-from PySide2 import QtCore, QtGui, QtOpenGL
+from Qt import QtCore, QtGui, QtOpenGL
 
 try:
     from OpenGL.GL import *

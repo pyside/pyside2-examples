@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 def createItem(minimum, preferred, maximum, name):

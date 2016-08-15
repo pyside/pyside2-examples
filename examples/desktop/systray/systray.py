@@ -42,7 +42,7 @@
 #import sip
 #sip.setapi('QVariant', 2)
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import systray_rc
 

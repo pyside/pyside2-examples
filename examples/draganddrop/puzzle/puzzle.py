@@ -29,7 +29,7 @@
 
 import random
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import puzzle_rc
 

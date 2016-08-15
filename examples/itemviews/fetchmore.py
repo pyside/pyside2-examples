@@ -3,7 +3,7 @@
 # Fetch More Example
 # Ported to PyQt4 by Darryl Wallace, 2009 - wallacdj@gmail.com
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 class FileListModel(QtCore.QAbstractListModel):

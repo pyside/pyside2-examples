@@ -1,19 +1,19 @@
 Examples
 ========
 
-PySide2 example scripts for PySide2. If you would like to install PySide2, please go to [pyside2-setup](https://github.com/PySide/pyside2-setup) for instructions.
+Qt example scripts for Qt. If you would like to install Qt, please go to [Qt-setup](https://github.com/PySide/Qt-setup) for instructions.
 
 Resources:
 
-* [PySide2-setup](https://github.com/PySide/pyside2-setup)
+* [Qt-setup](https://github.com/PySide/Qt-setup)
   The container-project with the setup.py script. It contains the following sub-projects:
-  * [PySide2 Wiki](https://github.com/PySide/pyside2/wiki)
+  * [Qt Wiki](https://github.com/PySide/Qt/wiki)
     Developer information
-  * [PySide2](https://github.com/PySide/pyside2)
-    The PySide2 project
+  * [Qt](https://github.com/PySide/Qt)
+    The Qt project
   * [Shiboken2](https://github.com/PySide/shiboken2)
     The Shiboken2 project
-  * [PySide2-tools](https://github.com/PySide/pyside2-examples)
-    The PySide2-tools project
-  * [PySide2-examples](https://github.com/PySide/pyside2-examples)
-    The PySide2 example scripts
+  * [Qt-tools](https://github.com/PySide/Qt-examples)
+    The Qt-tools project
+  * [Qt-examples](https://github.com/PySide/Qt-examples)
+    The Qt example scripts

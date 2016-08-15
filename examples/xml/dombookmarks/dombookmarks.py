@@ -2,7 +2,7 @@
 
 """PyQt4 port of the xml/dombookmarks example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui, QtXml
+from Qt import QtCore, QtGui, QtXml
 
 
 class MainWindow(QtGui.QMainWindow):

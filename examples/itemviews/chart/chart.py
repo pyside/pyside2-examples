@@ -25,7 +25,7 @@
 
 import math
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import chart_rc
 

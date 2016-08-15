@@ -37,7 +37,7 @@
 # $QT_END_LICENSE$
 
 
-from PySide2 import QtCore, QtGui, QtDeclarative
+from Qt import QtCore, QtGui, QtDeclarative
 
 class Console(QtCore.QObject):
     """Output stuff on the console."""

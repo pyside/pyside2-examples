@@ -23,7 +23,7 @@
 ##
 ############################################################################
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import editabletreemodel_rc
 from ui_mainwindow import Ui_MainWindow

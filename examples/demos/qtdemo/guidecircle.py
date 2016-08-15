@@ -1,6 +1,6 @@
 import math
 
-from PySide2 import QtCore
+from Qt import QtCore
 
 from guide import Guide
 

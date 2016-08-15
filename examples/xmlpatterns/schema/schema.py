@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-from PySide2 import QtCore, QtGui, QtXmlPatterns
+from Qt import QtCore, QtGui, QtXmlPatterns
 
 import schema_rc
 from ui_schema import Ui_SchemaMainWindow
