@@ -46,7 +46,7 @@ from PySide.QtGui import QDialog, QDialogButtonBox
 from QtMobility.PublishSubscribe import QValueSpace, QValueSpacePublisher
 
 try:
-    from PySide2 import QtMaemo5
+    from Qt import QtMaemo5
     USE_MAEMO_5 = True
     from publisherdialog_hor_ui import Ui_PublisherDialog
 except:

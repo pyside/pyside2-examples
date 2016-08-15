@@ -36,7 +36,7 @@
 
 from PySide.QtCore import QObject, QUrl, QAbstractListModel, QModelIndex, QThread, QTimer
 from PySide.QtCore import Property, Signal, Qt
-from PySide2 import  QtGui, QtDeclarative
+from Qt import  QtGui, QtDeclarative
 
 import gdata.photos, gdata.photos.service
 

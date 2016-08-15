@@ -24,7 +24,7 @@
 ***************************************************************************"""
 
 import sys
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 class CircleWidget(QtGui.QWidget):

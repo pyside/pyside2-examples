@@ -25,7 +25,7 @@
 import sys
 import os
 
-from PySide2 import QtGui
+from Qt import QtGui
 
 import qtdemo_rc
 

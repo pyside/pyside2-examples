@@ -23,10 +23,10 @@
 ##
 #############################################################################
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtWidgets, QtGui
 
 
-class AnalogClock(QtGui.QWidget):
+class AnalogClock(QtWidgets.QWidget):
     hourHand = QtGui.QPolygon([
         QtCore.QPoint(7, 8),
         QtCore.QPoint(-7, 8),
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     clock = AnalogClock()
     clock.show()
     sys.exit(app.exec_())

@@ -3,7 +3,7 @@
 
 """PySide port of the network/ftp example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui, QtNetwork
+from Qt import QtCore, QtGui, QtNetwork
 
 import ftp_rc
 

@@ -3,10 +3,10 @@
 import sys
 import os
 
-from PySide2 import QtCore
-from PySide2 import QtGui
-from PySide2 import QtDeclarative
-from PySide2 import QtOpenGL
+from Qt import QtCore
+from Qt import QtGui
+from Qt import QtDeclarative
+from Qt import QtOpenGL
 from QtMobility.SystemInfo import QSystemInfo, QSystemDeviceInfo, QSystemDisplayInfo, QSystemStorageInfo, QSystemNetworkInfo, QSystemScreenSaver
 
 

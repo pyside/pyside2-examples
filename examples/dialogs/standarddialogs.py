@@ -7,7 +7,7 @@
 #sip.setapi('QString', 2)
 
 import sys
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 class Dialog(QtGui.QDialog):

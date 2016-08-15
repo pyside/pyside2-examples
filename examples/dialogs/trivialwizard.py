@@ -2,7 +2,7 @@
 
 """PyQt4 port of the dialogs/trivialwizard example from Qt v4.x"""
 
-from PySide2 import QtGui
+from Qt import QtGui
 
 
 def createIntroPage():

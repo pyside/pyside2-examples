@@ -27,7 +27,7 @@
 #import sip
 #sip.setapi('QString', 2)
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import draggabletext_rc
 

@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 from demoitem import DemoItem
 

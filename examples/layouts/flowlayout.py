@@ -2,7 +2,7 @@
 
 """PyQt4 port of the layouts/flowlayout example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 class Window(QtGui.QWidget):

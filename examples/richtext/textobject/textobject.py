@@ -2,7 +2,7 @@
 
 """PyQt4 port of the richtext/textobject example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui, QtSvg
+from Qt import QtCore, QtGui, QtSvg
 
 
 class SvgTextObject(QtCore.QObject, QtGui.QTextObjectInterface):

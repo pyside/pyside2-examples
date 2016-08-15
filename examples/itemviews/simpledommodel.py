@@ -23,7 +23,7 @@
 **
 ***************************************************************************"""
 
-from PySide2 import QtCore, QtGui, QtXml
+from Qt import QtCore, QtGui, QtXml
 
 
 class DomItem(object):

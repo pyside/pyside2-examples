@@ -6,7 +6,7 @@
 #import sip
 #sip.setapi('QString', 2)
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 from embeddeddialog import Ui_embeddedDialog
 from embeddeddialogs_rc import *

@@ -23,7 +23,7 @@
 ##
 #############################################################################
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 class MoviePlayer(QtGui.QWidget):
     def __init__(self, parent=None):

@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PySide2 import QtCore, QtGui, QtHelp, QtXml
+from Qt import QtCore, QtGui, QtHelp, QtXml
 
 from colors import Colors
 from demoitemanimation import DemoItemAnimation

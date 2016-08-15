@@ -43,7 +43,7 @@
 # This file was taken from the PyQt examples,
 # which are adapted from the original C++ Qt examples.
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 import states_rc
 

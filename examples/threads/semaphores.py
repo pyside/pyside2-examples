@@ -25,7 +25,7 @@
 
 import sys
 import random
-from PySide2 import QtCore
+from Qt import QtCore
 
 
 DataSize = 100000

@@ -2,7 +2,7 @@
 
 """PyQt4 port of the tools/codecs example from Qt v4.x"""
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 def codec_name(codec):

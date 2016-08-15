@@ -9,7 +9,7 @@
 ##
 #############################################################################
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 class AddressBook(QtGui.QWidget):

@@ -1,4 +1,4 @@
-from PySide2 import QtCore
+from Qt import QtCore
 
 
 class Guide(object):

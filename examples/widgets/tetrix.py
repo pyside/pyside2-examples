@@ -4,7 +4,7 @@
 
 import random
 
-from PySide2 import QtCore, QtGui
+from Qt import QtCore, QtGui
 
 
 NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredLShape = range(8)

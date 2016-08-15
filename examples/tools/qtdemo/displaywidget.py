@@ -21,7 +21,7 @@
 ##
 ############################################################################
 
-from PySide2 import QtCore, QtGui, QtNetwork, QtXml
+from Qt import QtCore, QtGui, QtNetwork, QtXml
 
 
 class DisplayWidget(QtGui.QWidget):
