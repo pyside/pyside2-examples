@@ -40,30 +40,10 @@
 ##
 #############################################################################
 
-from __future__ import print_function
-
 import sys
-from PySide2.QtCore import QTimer, QUrl
-from PySide2.QtGui import QGuiApplication
-import PySide2.QtQml
-from PySide2.QtQuick import QQuickView
+isPY3 = sys.version_info[0] == 3
 
-if __name__ == '__main__':
-    app = QGuiApplication(sys.argv)
-
-    timer = QTimer()
-    timer.start(2000)
-
-    view = QQuickView()
-    view.setSource(QUrl('view.qml'))
-    root = view.rootObject()
-
-    timer.timeout.connect(root.updateRotater)
-    
-    view.show()
-    res = app.exec_()
-    # Deleting the view before it goes out of scope is required to make sure all child QML instances
-    # are destroyed in the correct order.
-    del view
-    sys.exit(res)
-
+if isPY3:
+    text_type = str
+else:
+    text_type = unicode
