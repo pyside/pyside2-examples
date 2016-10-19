@@ -1,39 +1,62 @@
 #!/usr/bin/env python
 
-#############################################################################
+############################################################################
 ##
-## Copyright (C) 2004-2005 Trolltech AS. All rights reserved.
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
 ##
-## This file is part of the example classes of the Qt Toolkit.
+## This file is part of the PySide examples of the Qt Toolkit.
 ##
-## This file may be used under the terms of the GNU General Public
-## License version 2.0 as published by the Free Software Foundation
-## and appearing in the file LICENSE.GPL included in the packaging of
-## this file.  Please review the following information to ensure GNU
-## General Public Licensing requirements will be met:
-## http://www.trolltech.com/products/qt/opensource.html
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
 ##
-## If you are unsure which license is appropriate for your use, please
-## review the following information:
-## http://www.trolltech.com/products/qt/licensing.html or contact the
-## sales department at sales@trolltech.com.
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
 ##
-## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
-#############################################################################
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+############################################################################
+
+"""PySide2 port of the opengl/legacy/grabber example from Qt v5.x"""
 
 import sys
 import math
 
-from PySide2 import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtWidgets, QtOpenGL
 
 try:
     from OpenGL.GL import *
 except ImportError:
-    app = QtGui.QApplication(sys.argv)
-    QtGui.QMessageBox.critical(None, "OpenGL grabber",
-            "PyOpenGL must be installed to run this example.")
+    app = QtWidgets.QApplication(sys.argv)
+    messageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical, "OpenGL grabber",
+                                       "PyOpenGL must be installed to run this example.",
+                                       QtWidgets.QMessageBox.Close)
+    messageBox.setDetailedText("Run:\npip install PyOpenGL PyOpenGL_accelerate")
+    messageBox.exec_()
     sys.exit(1)
 
 
@@ -57,7 +80,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         timer.timeout.connect(self.advanceGears)
         timer.start(20)
 
-    def __del__(self):
+    def freeResources(self):
         self.makeCurrent()
         glDeleteLists(self.gear1, 1)
         glDeleteLists(self.gear2, 1)
@@ -128,7 +151,7 @@ class GLWidget(QtOpenGL.QGLWidget):
         if side < 0:
             return
 
-        glViewport((width - side) / 2, (height - side) / 2, side, side)
+        glViewport(int((width - side) / 2), int((height - side) / 2), side, side)
 
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
@@ -263,29 +286,29 @@ class GLWidget(QtOpenGL.QGLWidget):
             angle -= 360 * 16
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):        
         super(MainWindow, self).__init__()
 
-        centralWidget = QtGui.QWidget()
+        centralWidget = QtWidgets.QWidget()
         self.setCentralWidget(centralWidget)
 
         self.glWidget = GLWidget()
-        self.pixmapLabel = QtGui.QLabel()
+        self.pixmapLabel = QtWidgets.QLabel()
 
-        self.glWidgetArea = QtGui.QScrollArea()
+        self.glWidgetArea = QtWidgets.QScrollArea()
         self.glWidgetArea.setWidget(self.glWidget)
         self.glWidgetArea.setWidgetResizable(True)
         self.glWidgetArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.glWidgetArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.glWidgetArea.setSizePolicy(QtGui.QSizePolicy.Ignored,
-                QtGui.QSizePolicy.Ignored)
+        self.glWidgetArea.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
+                QtWidgets.QSizePolicy.Ignored)
         self.glWidgetArea.setMinimumSize(50, 50)
 
-        self.pixmapLabelArea = QtGui.QScrollArea()
+        self.pixmapLabelArea = QtWidgets.QScrollArea()
         self.pixmapLabelArea.setWidget(self.pixmapLabel)
-        self.pixmapLabelArea.setSizePolicy(QtGui.QSizePolicy.Ignored,
-                QtGui.QSizePolicy.Ignored)
+        self.pixmapLabelArea.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
+                QtWidgets.QSizePolicy.Ignored)
         self.pixmapLabelArea.setMinimumSize(50, 50)
 
         xSlider = self.createSlider(self.glWidget.xRotationChanged,
@@ -298,7 +321,7 @@ class MainWindow(QtGui.QMainWindow):
         self.createActions()
         self.createMenus()
 
-        centralLayout = QtGui.QGridLayout()
+        centralLayout = QtWidgets.QGridLayout()
         centralLayout.addWidget(self.glWidgetArea, 0, 0)
         centralLayout.addWidget(self.pixmapLabelArea, 0, 1)
         centralLayout.addWidget(xSlider, 1, 0, 1, 2)
@@ -328,27 +351,27 @@ class MainWindow(QtGui.QMainWindow):
         self.setPixmap(QtGui.QPixmap())
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About Grabber",
+        QtWidgets.QMessageBox.about(self, "About Grabber",
                 "The <b>Grabber</b> example demonstrates two approaches for "
                 "rendering OpenGL into a Qt pixmap.")
 
     def createActions(self):
-        self.renderIntoPixmapAct = QtGui.QAction("&Render into Pixmap...",
+        self.renderIntoPixmapAct = QtWidgets.QAction("&Render into Pixmap...",
                 self, shortcut="Ctrl+R", triggered=self.renderIntoPixmap)
 
-        self.grabFrameBufferAct = QtGui.QAction("&Grab Frame Buffer", self,
+        self.grabFrameBufferAct = QtWidgets.QAction("&Grab Frame Buffer", self,
                 shortcut="Ctrl+G", triggered=self.grabFrameBuffer)
 
-        self.clearPixmapAct = QtGui.QAction("&Clear Pixmap", self,
+        self.clearPixmapAct = QtWidgets.QAction("&Clear Pixmap", self,
                 shortcut="Ctrl+L", triggered=self.clearPixmap)
 
-        self.exitAct = QtGui.QAction("E&xit", self, shortcut="Ctrl+Q",
+        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
                 triggered=self.close)
 
-        self.aboutAct = QtGui.QAction("&About", self, triggered=self.about)
+        self.aboutAct = QtWidgets.QAction("&About", self, triggered=self.about)
 
-        self.aboutQtAct = QtGui.QAction("About &Qt", self,
-                triggered=QtGui.qApp.aboutQt)
+        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
+                triggered=QtWidgets.qApp.aboutQt)
 
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu("&File")
@@ -363,12 +386,12 @@ class MainWindow(QtGui.QMainWindow):
         self.helpMenu.addAction(self.aboutQtAct)
 
     def createSlider(self, changedSignal, setterSlot):
-        slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         slider.setRange(0, 360 * 16)
         slider.setSingleStep(16)
         slider.setPageStep(15 * 16)
         slider.setTickInterval(15 * 16)
-        slider.setTickPosition(QtGui.QSlider.TicksRight)
+        slider.setTickPosition(QtWidgets.QSlider.TicksRight)
 
         slider.valueChanged.connect(setterSlot)
         changedSignal.connect(slider.setValue)
@@ -385,8 +408,8 @@ class MainWindow(QtGui.QMainWindow):
         self.pixmapLabel.resize(size)
 
     def getSize(self):
-        text, ok = QtGui.QInputDialog.getText(self, "Grabber",
-                "Enter pixmap size:", QtGui.QLineEdit.Normal,
+        text, ok = QtWidgets.QInputDialog.getText(self, "Grabber",
+                "Enter pixmap size:", QtWidgets.QLineEdit.Normal,
                 "%d x %d" % (self.glWidget.width(), self.glWidget.height()))
 
         if not ok:
@@ -405,7 +428,9 @@ class MainWindow(QtGui.QMainWindow):
 
 if __name__ == '__main__':
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
-    sys.exit(app.exec_())    
+    res = app.exec_()
+    mainWin.glWidget.freeResources()
+    sys.exit(res)

@@ -1,25 +1,67 @@
 #!/usr/bin/env python
 
-"""PySide port of the opengl/hellogl example from Qt v4.x"""
+############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+############################################################################
+
+"""PySide2 port of the opengl/legacy/hellogl example from Qt v5.x"""
 
 import sys
 import math
-from PySide2 import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtWidgets, QtOpenGL
 
 try:
     from OpenGL import GL
 except ImportError:
-    app = QtGui.QApplication(sys.argv)
-    QtGui.QMessageBox.critical(None, "OpenGL hellogl",
-                            "PyOpenGL must be installed to run this example.",
-                            QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,
-                            QtGui.QMessageBox.NoButton)
+    app = QtWidgets.QApplication(sys.argv)
+    messageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical, "OpenGL hellogl",
+                                       "PyOpenGL must be installed to run this example.",
+                                       QtWidgets.QMessageBox.Close)
+    messageBox.setDetailedText("Run:\npip install PyOpenGL PyOpenGL_accelerate")
+    messageBox.exec_()
     sys.exit(1)
 
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.glWidget = GLWidget()
 
@@ -30,7 +72,7 @@ class Window(QtGui.QWidget):
         self.zSlider = self.createSlider(QtCore.SIGNAL("zRotationChanged(int)"),
                                          self.glWidget.setZRotation)
 
-        mainLayout = QtGui.QHBoxLayout()
+        mainLayout = QtWidgets.QHBoxLayout()
         mainLayout.addWidget(self.glWidget)
         mainLayout.addWidget(self.xSlider)
         mainLayout.addWidget(self.ySlider)
@@ -44,13 +86,13 @@ class Window(QtGui.QWidget):
         self.setWindowTitle(self.tr("Hello GL"))
 
     def createSlider(self, changedSignal, setterSlot):
-        slider = QtGui.QSlider(QtCore.Qt.Vertical)
+        slider = QtWidgets.QSlider(QtCore.Qt.Vertical)
 
         slider.setRange(0, 360 * 16)
         slider.setSingleStep(16)
         slider.setPageStep(15 * 16)
         slider.setTickInterval(15 * 16)
-        slider.setTickPosition(QtGui.QSlider.TicksRight)
+        slider.setTickPosition(QtWidgets.QSlider.TicksRight)
 
         self.glWidget.connect(slider, QtCore.SIGNAL("valueChanged(int)"), setterSlot)
         self.connect(self.glWidget, changedSignal, slider, QtCore.SLOT("setValue(int)"))
@@ -61,6 +103,10 @@ class Window(QtGui.QWidget):
 class GLWidget(QtOpenGL.QGLWidget):
     def __init__(self, parent=None):
         QtOpenGL.QGLWidget.__init__(self, parent)
+
+        xRotationChanged = QtCore.Signal(int)
+        yRotationChanged = QtCore.Signal(int)
+        zRotationChanged = QtCore.Signal(int)
 
         self.object = 0
         self.xRot = 0
@@ -229,9 +275,14 @@ class GLWidget(QtOpenGL.QGLWidget):
             angle -= 360 * 16
         return angle
 
+    def freeResources(self):
+        self.makeCurrent()
+        GL.glDeleteLists(self.object, 1)
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.show()
-    sys.exit(app.exec_())
+    res = app.exec_()
+    window.glWidget.freeResources()
+    sys.exit(res)

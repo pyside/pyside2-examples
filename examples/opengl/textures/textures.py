@@ -1,39 +1,60 @@
 #!/usr/bin/env python
 
-"""***************************************************************************
-**
-** Copyright (C) 2005-2005 Trolltech AS. All rights reserved.
-**
-** This file is part of the example classes of the Qt Toolkit.
-**
-** This file may be used under the terms of the GNU General Public
-** License version 2.0 as published by the Free Software Foundation
-** and appearing in the file LICENSE.GPL included in the packaging of
-** this file.  Please review the following information to ensure GNU
-** General Public Licensing requirements will be met:
-** http://www.trolltech.com/products/qt/opensource.html
-**
-** If you are unsure which license is appropriate for your use, please
-** review the following information:
-** http://www.trolltech.com/products/qt/licensing.html or contact the
-** sales department at sales@trolltech.com.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-***************************************************************************"""
+############################################################################
+##
+## Copyright (C) 2013 Riverbank Computing Limited.
+## Copyright (C) 2016 The Qt Company Ltd.
+## Contact: http://www.qt.io/licensing/
+##
+## This file is part of the PySide examples of the Qt Toolkit.
+##
+## $QT_BEGIN_LICENSE:BSD$
+## You may use this file under the terms of the BSD license as follows:
+##
+## "Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are
+## met:
+##   * Redistributions of source code must retain the above copyright
+##     notice, this list of conditions and the following disclaimer.
+##   * Redistributions in binary form must reproduce the above copyright
+##     notice, this list of conditions and the following disclaimer in
+##     the documentation and/or other materials provided with the
+##     distribution.
+##   * Neither the name of The Qt Company Ltd nor the names of its
+##     contributors may be used to endorse or promote products derived
+##     from this software without specific prior written permission.
+##
+##
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+## A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+## OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+## LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+## DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+## THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+## OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+##
+## $QT_END_LICENSE$
+##
+############################################################################
+
+"""PySide2 port of the opengl/textures example from Qt v5.x"""
 
 import sys
-from PySide2 import QtCore, QtGui, QtOpenGL
+from PySide2 import QtCore, QtGui, QtWidgets, QtOpenGL
 
 try:
     from OpenGL.GL import *
 except ImportError:
-    app = QtGui.QApplication(sys.argv)
-    QtGui.QMessageBox.critical(None, "OpenGL textures",
-                            "PyOpenGL must be installed to run this example.",
-                            QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default,
-                            QtGui.QMessageBox.NoButton)
+    app = QtWidgets.QApplication(sys.argv)
+    messageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Critical, "OpenGL textures",
+                                       "PyOpenGL must be installed to run this example.",
+                                       QtWidgets.QMessageBox.Close)
+    messageBox.setDetailedText("Run:\npip install PyOpenGL PyOpenGL_accelerate")
+    messageBox.exec_()
     sys.exit(1)
 
 import textures_rc
@@ -110,7 +131,7 @@ class GLWidget(QtOpenGL.QGLWidget):
 
     def resizeGL(self, width, height):
         side = min(width, height)
-        glViewport((width - side) / 2, (height - side) / 2, side, side)
+        glViewport(int((width - side) / 2), int((height - side) / 2), side, side)
 
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
@@ -156,14 +177,14 @@ class GLWidget(QtOpenGL.QGLWidget):
         return dlist
 
 
-class Window(QtGui.QWidget):
+class Window(QtWidgets.QWidget):
     NumRows = 2
     NumColumns = 3
 
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
-        mainLayout = QtGui.QGridLayout()
+        mainLayout = QtWidgets.QGridLayout()
         self.glWidgets = []
 
         for i in range(Window.NumRows):
@@ -184,7 +205,7 @@ class Window(QtGui.QWidget):
                 mainLayout.addWidget(self.glWidgets[i][j], i, j)
 
                 self.glWidgets[i][j].clicked.connect(self.setCurrentGlWidget)
-                QtGui.qApp.lastWindowClosed.connect(self.glWidgets[i][j].freeGLResources)
+                QtWidgets.qApp.lastWindowClosed.connect(self.glWidgets[i][j].freeGLResources)
 
         self.setLayout(mainLayout)
 
@@ -205,7 +226,7 @@ class Window(QtGui.QWidget):
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = Window()
     window.show()
     sys.exit(app.exec_())
